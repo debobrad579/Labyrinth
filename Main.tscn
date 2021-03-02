@@ -456,7 +456,6 @@ points = PoolVector2Array( 0, 0, 16, 0, 16, 16, 0, 16 )
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
 position = Vector2( 144, -8 )
-MAX_SPEED = 600
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource( 48 )

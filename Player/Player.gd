@@ -1,7 +1,7 @@
 extends KinematicBody2D
 
 export var ACCELERATION = 3584
-export var MAX_SPEED = 448
+export var MAX_SPEED = 80
 export var GRAVITY = 300
 export var JUMP_FORCE = 128
 export var FRICTION = 0.25
@@ -14,6 +14,7 @@ onready var floorDetector = $FloorDetector
 onready var jumpTimer = $Timer
 onready var jumpTimer2 = $Timer2
 onready var moveTimer = $Timer3
+onready var moveTimer2 = $Timer4
 
 var motion = Vector2.ZERO
 var on_floor = false
@@ -22,23 +23,26 @@ var can_move = true
 var wall_jump = false
 var double_jump = DOUBLE_JUMP_TOTAL
 var wall_double_jump = true
+var move_speed_control = false
 
 func _physics_process(delta):
 	var x_input = Input.get_action_strength("walk_right") - Input.get_action_strength("walk_left")
-
+	print(ACCELERATION * delta)
 	if can_move == false:
 		x_input = 0
-	
+		
 	if x_input != 0:
-		motion.x = x_input * ACCELERATION * delta
+		motion.x += x_input * ACCELERATION * delta
 		motion.x = clamp(motion.x, -MAX_SPEED, MAX_SPEED)
 		
 	if on_floor == true:
+		move_speed_control = false
 		wall_double_jump = true
 		double_jump = DOUBLE_JUMP_TOTAL
 		if x_input == 0:
 			motion.x = lerp(motion.x, 0, FRICTION)
 		if Input.is_action_just_pressed("jump"):
+			move_speed_control = false
 			motion.y = -JUMP_FORCE
 			jump = true
 			jumpTimer2.start()
@@ -65,6 +69,7 @@ func _physics_process(delta):
 			if wall_double_jump == true and double_jump == 0:
 				double_jump = DOUBLE_JUMP_TOTAL
 				wall_double_jump = false
+				move_speed_control = false
 		elif Input.is_action_just_pressed("jump") and Input.is_action_pressed("walk_left"):
 			motion.y = -JUMP_FORCE
 			motion.x = 448
@@ -75,6 +80,7 @@ func _physics_process(delta):
 			if wall_double_jump == true and double_jump == 0:
 				double_jump = DOUBLE_JUMP_TOTAL
 				wall_double_jump = false
+				move_speed_control = false
 		if motion.y >= 0:
 			motion.y = min(motion.y + WALL_SLIDE_ACCELERATION, MAX_WALL_SLIDE_SPEED)
 	
@@ -99,3 +105,6 @@ func _on_Timer2_timeout():
 
 func _on_Timer3_timeout():
 	can_move = true
+
+func _on_Timer4_timeout():
+	pass

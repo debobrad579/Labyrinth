@@ -2,7 +2,7 @@
 
 [ext_resource path="res://Player/Player.gd" type="Script" id=1]
 
-[sub_resource type="RectangleShape2D" id=3]
+[sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 3.92402, 9.71526 )
 
 [sub_resource type="RectangleShape2D" id=2]
@@ -14,7 +14,7 @@ collision_layer = 2
 script = ExtResource( 1 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource( 3 )
+shape = SubResource( 1 )
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.1
@@ -35,8 +35,12 @@ one_shot = true
 [node name="Timer3" type="Timer" parent="."]
 wait_time = 0.4
 one_shot = true
+
+[node name="Timer4" type="Timer" parent="."]
+wait_time = 0.5
 [connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
 [connection signal="body_entered" from="FloorDetector" to="." method="_on_FloorDetector_body_entered"]
 [connection signal="body_exited" from="FloorDetector" to="." method="_on_FloorDetector_body_exited"]
 [connection signal="timeout" from="Timer2" to="." method="_on_Timer2_timeout"]
 [connection signal="timeout" from="Timer3" to="." method="_on_Timer3_timeout"]
+[connection signal="timeout" from="Timer4" to="." method="_on_Timer4_timeout"]
