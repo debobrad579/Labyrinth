@@ -33,6 +33,7 @@ func _physics_process(delta):
 		motion.x = clamp(motion.x, -MAX_SPEED, MAX_SPEED)
 		
 	if on_floor == true:
+		ACCELERATION = 500
 		wall_double_jump = true
 		double_jump = DOUBLE_JUMP_TOTAL
 		if x_input == 0:
@@ -60,6 +61,7 @@ func _physics_process(delta):
 		if Input.is_action_pressed("walk_right") and motion.x < 0 or Input.is_action_pressed("walk_left") and motion.x > 0:
 			can_move = true
 		if Input.is_action_just_pressed("jump") and Input.is_action_pressed("walk_right"):
+			ACCELERATION = 500
 			motion.y = -JUMP_FORCE
 			motion.x = -450
 			can_move = false
@@ -103,6 +105,8 @@ func _on_Timer2_timeout():
 
 func _on_Timer3_timeout():
 	can_move = true
+	moveTimer2.start()
+	ACCELERATION = 200
 
 func _on_Timer4_timeout():
-	pass
+	ACCELERATION = 500
