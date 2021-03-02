@@ -14,7 +14,6 @@ onready var floorDetector = $FloorDetector
 onready var jumpTimer = $Timer
 onready var jumpTimer2 = $Timer2
 onready var moveTimer = $Timer3
-onready var moveTimer2 = $Timer4
 
 var motion = Vector2.ZERO
 var on_floor = false
@@ -105,8 +104,5 @@ func _on_Timer2_timeout():
 
 func _on_Timer3_timeout():
 	can_move = true
-	moveTimer2.start()
 	ACCELERATION = 200
 
-func _on_Timer4_timeout():
-	ACCELERATION = 500
