@@ -38,6 +38,7 @@ one_shot = true
 
 [node name="Timer4" type="Timer" parent="."]
 wait_time = 0.5
+one_shot = true
 [connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
 [connection signal="body_entered" from="FloorDetector" to="." method="_on_FloorDetector_body_entered"]
 [connection signal="body_exited" from="FloorDetector" to="." method="_on_FloorDetector_body_exited"]

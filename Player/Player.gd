@@ -1,7 +1,7 @@
 extends KinematicBody2D
 
-export var ACCELERATION = 3584
-export var MAX_SPEED = 80
+export var ACCELERATION = 500
+export var MAX_SPEED = 90
 export var GRAVITY = 300
 export var JUMP_FORCE = 128
 export var FRICTION = 0.25
@@ -23,26 +23,21 @@ var can_move = true
 var wall_jump = false
 var double_jump = DOUBLE_JUMP_TOTAL
 var wall_double_jump = true
-var move_speed_control = false
+var can_resist = false
 
 func _physics_process(delta):
 	var x_input = Input.get_action_strength("walk_right") - Input.get_action_strength("walk_left")
-	print(ACCELERATION * delta)
-	if can_move == false:
-		x_input = 0
 		
-	if x_input != 0:
+	if x_input != 0 and can_move == true:
 		motion.x += x_input * ACCELERATION * delta
 		motion.x = clamp(motion.x, -MAX_SPEED, MAX_SPEED)
 		
 	if on_floor == true:
-		move_speed_control = false
 		wall_double_jump = true
 		double_jump = DOUBLE_JUMP_TOTAL
 		if x_input == 0:
 			motion.x = lerp(motion.x, 0, FRICTION)
 		if Input.is_action_just_pressed("jump"):
-			move_speed_control = false
 			motion.y = -JUMP_FORCE
 			jump = true
 			jumpTimer2.start()
@@ -54,6 +49,11 @@ func _physics_process(delta):
 			motion.x = lerp(motion.x, 0, AIR_RISISTANCE)
 		if double_jump > 0 and Input.is_action_just_pressed("jump") and is_on_wall() == false:
 			motion.y = -JUMP_FORCE
+			if Input.is_action_pressed("walk_right"):
+				motion.x = MAX_SPEED
+			if Input.is_action_pressed("walk_left"):
+				motion.x = -MAX_SPEED
+			can_move = true
 			double_jump = 0
 			
 	if is_on_wall() and on_floor == false:
@@ -61,26 +61,24 @@ func _physics_process(delta):
 			can_move = true
 		if Input.is_action_just_pressed("jump") and Input.is_action_pressed("walk_right"):
 			motion.y = -JUMP_FORCE
-			motion.x = -448
+			motion.x = -450
 			can_move = false
 			wall_jump = true
 			moveTimer.start()
-			motion.x = lerp(motion.x, 0, 0.8)
+			motion.x = lerp(motion.x, 0, 0.835)
 			if wall_double_jump == true and double_jump == 0:
 				double_jump = DOUBLE_JUMP_TOTAL
 				wall_double_jump = false
-				move_speed_control = false
 		elif Input.is_action_just_pressed("jump") and Input.is_action_pressed("walk_left"):
 			motion.y = -JUMP_FORCE
-			motion.x = 448
+			motion.x = 450
 			can_move = false
 			wall_jump = true
 			moveTimer.start()
-			motion.x = lerp(motion.x, 0, 0.8)
+			motion.x = lerp(motion.x, 0, 0.835)
 			if wall_double_jump == true and double_jump == 0:
 				double_jump = DOUBLE_JUMP_TOTAL
 				wall_double_jump = false
-				move_speed_control = false
 		if motion.y >= 0:
 			motion.y = min(motion.y + WALL_SLIDE_ACCELERATION, MAX_WALL_SLIDE_SPEED)
 	
