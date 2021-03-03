@@ -28,20 +28,10 @@ shape = SubResource( 2 )
 wait_time = 0.1
 one_shot = true
 
-[node name="Timer2" type="Timer" parent="."]
-wait_time = 0.1
-one_shot = true
-
-[node name="Timer3" type="Timer" parent="."]
+[node name="WallJumpTimer" type="Timer" parent="."]
 wait_time = 0.4
-one_shot = true
-
-[node name="Timer4" type="Timer" parent="."]
-wait_time = 0.5
 one_shot = true
 [connection signal="body_entered" from="WallDetector" to="." method="_on_WallDetector_body_entered"]
 [connection signal="body_exited" from="WallDetector" to="." method="_on_WallDetector_body_exited"]
 [connection signal="timeout" from="CoyoteTimer" to="." method="_on_Timer_timeout"]
-[connection signal="timeout" from="Timer2" to="." method="_on_Timer2_timeout"]
-[connection signal="timeout" from="Timer3" to="." method="_on_Timer3_timeout"]
-[connection signal="timeout" from="Timer4" to="." method="_on_Timer4_timeout"]
+[connection signal="timeout" from="WallJumpTimer" to="." method="_on_WallJumpTimer_timeout"]

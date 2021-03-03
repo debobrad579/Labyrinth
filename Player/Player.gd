@@ -14,9 +14,7 @@ export var DOUBLE_JUMP_TOTAL = 1
 # Preload Nodes
 onready var floorDetector = $FloorDetector
 onready var CoyoteTimer = $CoyoteTimer
-onready var jumpTimer2 = $Timer2
-onready var moveTimer = $Timer3
-onready var moveTimer2 = $Timer4
+onready var moveTimer = $WallJumpTimer
 
 # Player Platforming Variables
 var motion = Vector2.ZERO
@@ -109,8 +107,7 @@ func _physics_process(delta):\
 			# Jump
 			motion.y = -JUMP_FORCE
 			# Simplified max speed affector
-			#if can_move: # If the player can move, then adjust the x
-			motion.x += (MAX_SPEED * x_input) / 2
+			motion.x = (MAX_SPEED * x_input) / 2
 			motion.x = clamp(motion.x, -MAX_SPEED, MAX_SPEED)
 			
 			# After jump is complete, player can move again
@@ -153,29 +150,14 @@ func _physics_process(delta):\
 	motion += gravity_vector * delta
 	motion = move_and_slide(motion, -gravity_vector, true, 4, PI/4, false)
 
-func _on_Timer_timeout():
-	#on_floor = false
-	#print(rand_range(1,10))
-	
-	pass
-
-func _on_Timer2_timeout():
-	#jump = false
-	
-	pass
-
-func _on_Timer3_timeout():
-	can_move = true
-	moveTimer2.start()
-	ACCELERATION = 200
-
-func _on_Timer4_timeout():
-	ACCELERATION = 500
-
-
 func _on_WallDetector_body_entered(body):
 	on_wall = true
 
 
 func _on_WallDetector_body_exited(body):
 	on_wall = false
+
+
+func _on_WallJumpTimer_timeout():
+	can_move = true
+	ACCELERATION = 200
