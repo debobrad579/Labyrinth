@@ -29,7 +29,6 @@ var can_resist = false
 # Main physics and process function
 func _physics_process(delta):
 	
-	print(AIR_RESISTANCE)
 	# Set the horizontal input
 	var x_input = Input.get_action_strength("walk_right") - Input.get_action_strength("walk_left")
 	
