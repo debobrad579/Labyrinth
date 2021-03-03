@@ -54,6 +54,7 @@ func _physics_process(delta):\
 	# If player is on floor and the coyote timer is not stopped,
 	if is_on_floor() or not coyoteTimer.is_stopped():
 		
+
 		# Wall jump is reset when on floor
 		wall_double_jump = true
 		double_jump = DOUBLE_JUMP_TOTAL
