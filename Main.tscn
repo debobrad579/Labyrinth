@@ -458,7 +458,7 @@ extents = Vector2( 10, 109.364 )
 [node name="Main" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
-position = Vector2( 256, -48 )
+position = Vector2( 168, 48 )
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource( 48 )
@@ -471,6 +471,6 @@ tile_data = PoolIntArray( -1, 0, 0, -65536, 0, 2, 65535, 0, 65536, 0, 0, 65538, 
 position = Vector2( 256, 72 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
-position = Vector2( -7.99997, -16 )
+position = Vector2( -336, -8 )
 rotation = 0.349066
 shape = SubResource( 49 )
