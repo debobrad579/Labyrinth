@@ -53,8 +53,6 @@ func _physics_process(delta):\
 	
 	# If player is on floor and the coyote timer is not stopped,
 	if is_on_floor() or not coyoteTimer.is_stopped():
-		# TODO
-		ACCELERATION = 500
 		
 		# Wall jump is reset when on floor
 		wall_double_jump = true
@@ -120,27 +118,19 @@ func _physics_process(delta):\
 	# If on wall and not on floor (air wall)
 	if on_wall and not is_on_floor():
 		
-		
-		if Input.is_action_pressed("walk_right") and motion.x < 0 or Input.is_action_pressed("walk_left") and motion.x > 0:
-			can_move = true
-		if Input.is_action_just_pressed("jump") and Input.is_action_pressed("walk_right"):
-			ACCELERATION = 500
+		if Input.is_action_just_pressed("jump") and x_input != 0:
+			var wall_side
+			
+			if wallChecker.is_colliding():
+				wall_side = 1
+			else:
+				wall_side = -1
+			
 			motion.y = -JUMP_FORCE
-			motion.x = -450
+			motion.x = MAX_SPEED * -wall_side
 			can_move = false
 			wall_jump = true
 			moveTimer.start()
-			motion.x = lerp(motion.x, 0, 0.835)
-			if wall_double_jump == true and double_jump == 0:
-				double_jump = DOUBLE_JUMP_TOTAL
-				wall_double_jump = false
-		elif Input.is_action_just_pressed("jump") and Input.is_action_pressed("walk_left"):
-			motion.y = -JUMP_FORCE
-			motion.x = 450
-			can_move = false
-			wall_jump = true
-			moveTimer.start()
-			motion.x = lerp(motion.x, 0, 0.835)
 			if wall_double_jump == true and double_jump == 0:
 				double_jump = DOUBLE_JUMP_TOTAL
 				wall_double_jump = false
@@ -162,4 +152,3 @@ func _on_WallDetector_body_exited(body):
 
 func _on_WallJumpTimer_timeout():
 	can_move = true
-	#ACCELERATION = 200

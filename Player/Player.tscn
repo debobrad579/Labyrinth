@@ -35,6 +35,9 @@ wait_time = 0.4
 one_shot = true
 
 [node name="WallChecker" type="RayCast2D" parent="."]
+enabled = true
+exclude_parent = false
+cast_to = Vector2( 5, 0 )
 [connection signal="body_entered" from="WallDetector" to="." method="_on_WallDetector_body_entered"]
 [connection signal="body_exited" from="WallDetector" to="." method="_on_WallDetector_body_exited"]
 [connection signal="timeout" from="CoyoteTimer" to="." method="_on_Timer_timeout"]
