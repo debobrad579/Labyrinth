@@ -5,8 +5,8 @@ export var ACCELERATION = 500
 export var MAX_SPEED = 90
 export var GRAVITY = 300
 export var JUMP_FORCE = 128
-export var FRICTION = 750
-export var AIR_RESISTANCE = 300
+export var FRICTION = 675
+export var AIR_RESISTANCE = 150
 export var WALL_SLIDE_ACCELERATION = 2
 export var MAX_WALL_SLIDE_SPEED = 30
 export var DOUBLE_JUMP_TOTAL = 1
@@ -27,7 +27,7 @@ var wall_double_jump = true
 var can_resist = false
 
 # Main physics and process function
-func _physics_process(delta):\
+func _physics_process(delta):
 	
 	# Set the horizontal input
 	var x_input = Input.get_action_strength("walk_right") - Input.get_action_strength("walk_left")
@@ -53,6 +53,8 @@ func _physics_process(delta):\
 	
 	# If player is on floor and the coyote timer is not stopped,
 	if is_on_floor() or not coyoteTimer.is_stopped():
+		
+		ACCELERATION = 500
 		
 
 		# Wall jump is reset when on floor
@@ -102,6 +104,8 @@ func _physics_process(delta):\
 			
 		# If there are still double jumps left and they press jump
 		if double_jump > 0 and Input.is_action_just_pressed("jump") and is_on_wall() == false:
+			
+			ACCELERATION = 500
 			
 			# Jump
 			motion.y = -JUMP_FORCE
@@ -166,3 +170,4 @@ func _on_WallDetector_body_exited(body):
 
 func _on_WallJumpTimer_timeout():
 	can_move = true
+	ACCELERATION = 200
