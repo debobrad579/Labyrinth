@@ -29,6 +29,7 @@ var can_resist = false
 # Main physics and process function
 func _physics_process(delta):
 	
+	print(AIR_RESISTANCE)
 	# Set the horizontal input
 	var x_input = Input.get_action_strength("walk_right") - Input.get_action_strength("walk_left")
 	
@@ -126,6 +127,8 @@ func _physics_process(delta):
 		# If jump is pressed and the player is pressing a key.
 		if Input.is_action_just_pressed("jump") and x_input != 0:
 			
+			AIR_RESISTANCE = 75
+			
 			# Determine what wall side the player is on
 			var wall_side
 			
@@ -170,4 +173,5 @@ func _on_WallDetector_body_exited(body):
 
 func _on_WallJumpTimer_timeout():
 	can_move = true
+	AIR_RESISTANCE = 150
 	ACCELERATION = 200
