@@ -111,7 +111,7 @@ func _physics_process(delta):
 			motion.x = move_toward(motion.x, 0, AIR_RESISTANCE * delta)
 			
 		# If there are still double jumps left and they press jump
-		if double_jump > 0 and Input.is_action_just_pressed("jump") and is_on_wall() == false:
+		if double_jump > 0 and Input.is_action_just_pressed("jump") and not on_wall:
 			
 			ACCELERATION = 500
 			
