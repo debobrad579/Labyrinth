@@ -38,9 +38,9 @@ func floor_detected():
 # Main physics and process function
 func _physics_process(delta):
 	
+	# If they jump slightly before ground contact, they will jump on contact.
 	if floor_detected() == false and Input.is_action_just_pressed("jump"):
 		jumpTimer.start()
-	# If they jump slightly before ground contact, they will jump on contact.
 	
 	# Set the horizontal input
 	var x_input = Input.get_action_strength("walk_right") - Input.get_action_strength("walk_left")
