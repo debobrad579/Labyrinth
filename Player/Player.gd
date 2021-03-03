@@ -12,9 +12,9 @@ export var MAX_WALL_SLIDE_SPEED = 30
 export var DOUBLE_JUMP_TOTAL = 1
 
 # Preload Nodes
-onready var floorDetector = $FloorDetector
-onready var CoyoteTimer = $CoyoteTimer
+onready var coyoteTimer = $CoyoteTimer
 onready var moveTimer = $WallJumpTimer
+onready var wallChecker = $WallChecker
 
 # Player Platforming Variables
 var motion = Vector2.ZERO
@@ -52,7 +52,7 @@ func _physics_process(delta):\
 	if is_on_floor(): on_floor = true
 	
 	# If player is on floor and the coyote timer is not stopped,
-	if is_on_floor() or not CoyoteTimer.is_stopped():
+	if is_on_floor() or not coyoteTimer.is_stopped():
 		# TODO
 		ACCELERATION = 500
 		
@@ -85,7 +85,7 @@ func _physics_process(delta):\
 		if on_floor == true:
 			
 			# Start the coyote timer!
-			CoyoteTimer.start()
+			coyoteTimer.start()
 			# Then indicate, they are no longer on the floor, so the coyote
 			# timer is not reset again.
 			on_floor = false
@@ -117,8 +117,10 @@ func _physics_process(delta):\
 			double_jump -= 1
 			if double_jump < 0: double_jump = 0
 	
-	# If on wall
-	if on_wall and on_floor == false:
+	# If on wall and not on floor (air wall)
+	if on_wall and not is_on_floor():
+		
+		
 		if Input.is_action_pressed("walk_right") and motion.x < 0 or Input.is_action_pressed("walk_left") and motion.x > 0:
 			can_move = true
 		if Input.is_action_just_pressed("jump") and Input.is_action_pressed("walk_right"):
@@ -160,4 +162,4 @@ func _on_WallDetector_body_exited(body):
 
 func _on_WallJumpTimer_timeout():
 	can_move = true
-	ACCELERATION = 200
+	#ACCELERATION = 200

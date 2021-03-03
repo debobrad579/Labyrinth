@@ -458,7 +458,7 @@ extents = Vector2( 144.873, 10 )
 [node name="Main" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
-position = Vector2( 144, -8 )
+position = Vector2( 150.502, -5.33936 )
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource( 48 )
@@ -469,7 +469,6 @@ tile_data = PoolIntArray( -1, 0, 0, -65536, 0, 2, 65535, 0, 65536, 0, 0, 65538, 
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 position = Vector2( 248.444, 131.903 )
-rotation = -0.331256
 __meta__ = {
 "_edit_group_": true
 }
