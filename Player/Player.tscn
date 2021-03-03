@@ -35,6 +35,10 @@ one_shot = true
 wait_time = 0.4
 one_shot = true
 
+[node name="JumpTimer" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+
 [node name="WallChecker" type="RayCast2D" parent="."]
 visible = false
 enabled = true
@@ -52,7 +56,8 @@ visible = false
 position = Vector2( -2.6, 0 )
 enabled = true
 cast_to = Vector2( 0, 9.75 )
+
+[node name="RemoteTransform" type="RemoteTransform2D" parent="."]
 [connection signal="body_entered" from="WallDetector" to="." method="_on_WallDetector_body_entered"]
 [connection signal="body_exited" from="WallDetector" to="." method="_on_WallDetector_body_exited"]
-[connection signal="timeout" from="CoyoteTimer" to="." method="_on_Timer_timeout"]
 [connection signal="timeout" from="WallJumpTimer" to="." method="_on_WallJumpTimer_timeout"]

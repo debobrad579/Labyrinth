@@ -17,6 +17,7 @@ onready var moveTimer = $WallJumpTimer
 onready var wallChecker = $WallChecker
 onready var LfloorDetector = $LeftFloorDetector
 onready var RfloorDetector = $RightFloorDetector
+onready var jumpTimer = $JumpTimer
 
 # Player Platforming Variables
 var motion = Vector2.ZERO
@@ -36,6 +37,10 @@ func floor_detected():
 	
 # Main physics and process function
 func _physics_process(delta):
+	
+	if floor_detected() == false and Input.is_action_just_pressed("jump"):
+		jumpTimer.start()
+	# If they jump slightly before ground contact, they will jump on contact.
 	
 	# Set the horizontal input
 	var x_input = Input.get_action_strength("walk_right") - Input.get_action_strength("walk_left")
@@ -57,7 +62,10 @@ func _physics_process(delta):
 	# is now used to detect coyote time. --------------------------------------
 	
 	# If is on floor, then set on floor to true.
-	if floor_detected() == true: on_floor = true
+	if floor_detected() == true: 
+		on_floor = true
+		if jumpTimer.is_stopped() == false:
+			motion.y = -JUMP_FORCE
 	
 	# If player is on floor and the coyote timer is not stopped,
 	if floor_detected() == true or not coyoteTimer.is_stopped():
@@ -170,11 +178,11 @@ func _physics_process(delta):
 	motion += gravity_vector * delta
 	motion = move_and_slide(motion, -gravity_vector, true, 4, PI/4, false)
 
-func _on_WallDetector_body_entered(body):
+func _on_WallDetector_body_entered(_body):
 	on_wall = true
 
 
-func _on_WallDetector_body_exited(body):
+func _on_WallDetector_body_exited(_body):
 	on_wall = false
 
 
