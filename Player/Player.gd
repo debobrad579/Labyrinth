@@ -6,7 +6,7 @@ export var MAX_SPEED = 90
 export var GRAVITY = 300
 export var JUMP_FORCE = 128
 export var FRICTION = 750
-export var AIR_RISISTANCE = 300
+export var AIR_RESISTANCE = 300
 export var WALL_SLIDE_ACCELERATION = 2
 export var MAX_WALL_SLIDE_SPEED = 30
 export var DOUBLE_JUMP_TOTAL = 1
@@ -97,7 +97,7 @@ func _physics_process(delta):\
 		if x_input == 0:
 			
 			# Air friction
-			motion.x = move_toward(motion.x, 0, AIR_RISISTANCE * delta)
+			motion.x = move_toward(motion.x, 0, AIR_RESISTANCE * delta)
 			
 		# If there are still double jumps left and they press jump
 		if double_jump > 0 and Input.is_action_just_pressed("jump") and is_on_wall() == false:
@@ -118,23 +118,36 @@ func _physics_process(delta):\
 	# If on wall and not on floor (air wall)
 	if on_wall and not is_on_floor():
 		
+		# If jump is pressed and the player is pressing a key.
 		if Input.is_action_just_pressed("jump") and x_input != 0:
+			
+			# Determine what wall side the player is on
 			var wall_side
 			
+			# Use RayCast to check if wall is on right. Otherwise left
 			if wallChecker.is_colliding():
 				wall_side = 1
 			else:
 				wall_side = -1
 			
+			# Add jump force
 			motion.y = -JUMP_FORCE
+			# Add velocity based on what wall you are on
 			motion.x = MAX_SPEED * -wall_side
+			# Turn of movement
 			can_move = false
+			# Indicate a wall jump has occured
 			wall_jump = true
+			# Disable movement temporarily
 			moveTimer.start()
+			
+			# Secondary double jump
 			if wall_double_jump == true and double_jump == 0:
 				double_jump = DOUBLE_JUMP_TOTAL
 				wall_double_jump = false
-		if motion.y >= 0:
+		
+		# Wall scaling (only if moving into it)
+		if motion.y >= 0 and x_input != 0:
 			motion.y = min(motion.y + WALL_SLIDE_ACCELERATION, MAX_WALL_SLIDE_SPEED)
 	
 	
