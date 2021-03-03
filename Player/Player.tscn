@@ -23,6 +23,7 @@ shape = SubResource( 1 )
 collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WallDetector"]
+visible = false
 position = Vector2( 0.038311, 1.55319 )
 shape = SubResource( 2 )
 
@@ -35,9 +36,22 @@ wait_time = 0.4
 one_shot = true
 
 [node name="WallChecker" type="RayCast2D" parent="."]
+visible = false
 enabled = true
 exclude_parent = false
 cast_to = Vector2( 5, 0 )
+
+[node name="RightFloorDetector" type="RayCast2D" parent="."]
+visible = false
+position = Vector2( 2.6, 0 )
+enabled = true
+cast_to = Vector2( 0, 9.75 )
+
+[node name="LeftFloorDetector" type="RayCast2D" parent="."]
+visible = false
+position = Vector2( -2.6, 0 )
+enabled = true
+cast_to = Vector2( 0, 9.75 )
 [connection signal="body_entered" from="WallDetector" to="." method="_on_WallDetector_body_entered"]
 [connection signal="body_exited" from="WallDetector" to="." method="_on_WallDetector_body_exited"]
 [connection signal="timeout" from="CoyoteTimer" to="." method="_on_Timer_timeout"]

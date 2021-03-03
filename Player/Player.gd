@@ -15,6 +15,8 @@ export var DOUBLE_JUMP_TOTAL = 1
 onready var coyoteTimer = $CoyoteTimer
 onready var moveTimer = $WallJumpTimer
 onready var wallChecker = $WallChecker
+onready var LfloorDetector = $LeftFloorDetector
+onready var RfloorDetector = $RightFloorDetector
 
 # Player Platforming Variables
 var motion = Vector2.ZERO
@@ -26,6 +28,12 @@ var double_jump = DOUBLE_JUMP_TOTAL
 var wall_double_jump = true
 var can_resist = false
 
+func floor_detected():
+	if is_on_floor() or LfloorDetector.is_colliding() or RfloorDetector.is_colliding():
+		return(true)
+	else:
+		return(false)
+	
 # Main physics and process function
 func _physics_process(delta):
 	
@@ -49,10 +57,10 @@ func _physics_process(delta):
 	# is now used to detect coyote time. --------------------------------------
 	
 	# If is on floor, then set on floor to true.
-	if is_on_floor(): on_floor = true
+	if floor_detected() == true: on_floor = true
 	
 	# If player is on floor and the coyote timer is not stopped,
-	if is_on_floor() or not coyoteTimer.is_stopped():
+	if floor_detected() == true or not coyoteTimer.is_stopped():
 		
 		ACCELERATION = 500
 		
@@ -121,12 +129,12 @@ func _physics_process(delta):
 			if double_jump < 0: double_jump = 0
 	
 	# If on wall and not on floor (air wall)
-	if on_wall and not is_on_floor():
+	if on_wall and floor_detected() == false:
 		
 		# If jump is pressed and the player is pressing a key.
 		if Input.is_action_just_pressed("jump") and x_input != 0:
 			
-			AIR_RESISTANCE = 75
+			AIR_RESISTANCE = 70
 			
 			# Determine what wall side the player is on
 			var wall_side
@@ -172,5 +180,5 @@ func _on_WallDetector_body_exited(body):
 
 func _on_WallJumpTimer_timeout():
 	can_move = true
-	AIR_RESISTANCE = 150
+	AIR_RESISTANCE = 250
 	ACCELERATION = 200
