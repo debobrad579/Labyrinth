@@ -6,7 +6,7 @@ export var MAX_SPEED = 90
 export var GRAVITY = 300
 export var JUMP_FORCE = 128
 export var FRICTION = 750
-export var AIR_RISISTANCE = 0.02
+export var AIR_RISISTANCE = 300
 export var WALL_SLIDE_ACCELERATION = 2
 export var MAX_WALL_SLIDE_SPEED = 30
 export var DOUBLE_JUMP_TOTAL = 1
@@ -49,12 +49,11 @@ func _physics_process(delta):\
 	# Finally, I removed the "jump" boolean and just set on_floor = false, which
 	# is now used to detect coyote time. --------------------------------------
 	
-	# If player is on floor,
-	if is_on_floor() == true or not CoyoteTimer.is_stopped():
-		
-		# Set on_floor to true (this is used for detecting coyote time now
-		on_floor = true
-		
+	# If is on floor, then set on floor to true.
+	if is_on_floor(): on_floor = true
+	
+	# If player is on floor and the coyote timer is not stopped,
+	if is_on_floor() or not CoyoteTimer.is_stopped():
 		# TODO
 		ACCELERATION = 500
 		
@@ -89,22 +88,32 @@ func _physics_process(delta):\
 			# Start the coyote timer!
 			CoyoteTimer.start()
 			# Then indicate, they are no longer on the floor, so the coyote
-			# Timer is not reset again.
+			# timer is not reset again.
 			on_floor = false
 		
+		# If jump is released too soon, cut jump force by half (only if jump force
+		# Exceeds half value, though).
 		if Input.is_action_just_released("jump") and motion.y < -JUMP_FORCE/2 and wall_jump == false:
 			motion.y = -JUMP_FORCE/2
-			
+		
+		# If no horizontal input,
 		if x_input == 0:
-			motion.x = lerp(motion.x, 0, AIR_RISISTANCE)
+			
+			# Air friction
+			motion.x = move_toward(motion.x, 0, AIR_RISISTANCE * delta)
+			
+		# If there are still double jumps left and they press jump
 		if double_jump > 0 and Input.is_action_just_pressed("jump") and is_on_wall() == false:
+			
+			# Jump
 			motion.y = -JUMP_FORCE
-			if Input.is_action_pressed("walk_right"):
-				motion.x = MAX_SPEED
-			if Input.is_action_pressed("walk_left"):
-				motion.x = -MAX_SPEED
+			# Simplified max speed affector
+			if can_move: # If the player can move, then adjust the x
+				motion.x += (MAX_SPEED * x_input) / 2
+				motion.x = clamp(motion.x, -MAX_SPEED, MAX_SPEED)
 			can_move = true
-			double_jump = 0
+			double_jump -= 1
+			if double_jump < 0: double_jump = 0
 			
 	if is_on_wall() and on_floor == false:
 		if Input.is_action_pressed("walk_right") and motion.x < 0 or Input.is_action_pressed("walk_left") and motion.x > 0:
