@@ -1,13 +1,19 @@
 extends KinematicBody2D
 
-# Player id
+# Player id. Note that it is exported, so this value can be 
+# Adjusted for Player1 scene and Player2 scene to 0 and 1 respectively.
+# See _ready() function below
 export var player_id = 0 #0 is player 1... 1 is player 2
 
+# Set up input map variables
 var LEFT
 var RIGHT
 var JUMP
 var DASH
 
+# When the players id is changed, adopt appropriate input map.
+# Characteers with an id that is no p1 or p2 would be assigned a blank
+# Input map so they do not move.
 func change_player_id(id):
 	
 	player_id = id
@@ -64,6 +70,7 @@ var double_jump = DOUBLE_JUMP_TOTAL
 var wall_double_jump = true
 var can_resist = false
 
+# When ready, change the id and input maps to the cooresponding ones.
 func _ready():
 	change_player_id(player_id)
 
