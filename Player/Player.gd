@@ -1,14 +1,12 @@
 extends KinematicBody2D
 
-class_name Player
-
 # Player id
 export var player_id = 0 #0 is player 1... 1 is player 2
 
-var LEFT = "walk_left_p1"
-var RIGHT = "walk_right_p1"
-var JUMP = "jump_p1"
-var DASH = "dash_p1"
+var LEFT
+var RIGHT
+var JUMP
+var DASH
 
 func change_player_id(id):
 	
@@ -65,6 +63,10 @@ var wall_jump = false
 var double_jump = DOUBLE_JUMP_TOTAL
 var wall_double_jump = true
 var can_resist = false
+
+func _ready():
+	change_player_id(player_id)
+
 
 func floor_detected():
 	if is_on_floor() or LfloorDetector.is_colliding() or RfloorDetector.is_colliding():
