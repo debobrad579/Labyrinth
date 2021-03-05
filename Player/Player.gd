@@ -73,6 +73,7 @@ var can_resist = false
 # When ready, change the id and input maps to the cooresponding ones.
 func _ready():
 	change_player_id(player_id)
+	add_to_group("Players", true)
 
 
 func floor_detected():
