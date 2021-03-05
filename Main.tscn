@@ -1,8 +1,9 @@
-[gd_scene load_steps=53 format=2]
+[gd_scene load_steps=54 format=2]
 
-[ext_resource path="res://Player/Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Player/Player1.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Graphics/Tile Set v1.0.png" type="Texture" id=2]
 [ext_resource path="res://Player/Camera.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Player/Player2.tscn" type="PackedScene" id=4]
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
 points = PoolVector2Array( 0, 0, 16, 0, 16, 16, 0, 16 )
@@ -458,11 +459,15 @@ extents = Vector2( 10, 109.364 )
 
 [node name="Main" type="Node2D"]
 
-[node name="Player" parent="." instance=ExtResource( 1 )]
-position = Vector2( 168, 48 )
+[node name="Player2" parent="." groups=[
+"Players",
+] instance=ExtResource( 4 )]
+position = Vector2( 196.929, 31.1127 )
 
-[node name="RemoteTransform" parent="Player" index="7"]
-remote_path = NodePath("../../Camera")
+[node name="Player1" parent="." groups=[
+"Players",
+] instance=ExtResource( 1 )]
+position = Vector2( 158.745, 30.7591 )
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource( 48 )
@@ -480,14 +485,13 @@ rotation = 0.349066
 shape = SubResource( 49 )
 
 [node name="Camera" parent="." instance=ExtResource( 3 )]
-position = Vector2( 168, 48 )
+position = Vector2( 159.513, 67.4094 )
+smoothing_enabled = true
 
 [node name="TopLeft" parent="Camera/Limits" index="0"]
 position = Vector2( -416, -216 )
 
 [node name="BottomRight" parent="Camera/Limits" index="1"]
 position = Vector2( 1136, 192 )
-
-[editable path="Player"]
 
 [editable path="Camera"]
