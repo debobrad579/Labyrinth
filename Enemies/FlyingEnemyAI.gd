@@ -7,13 +7,13 @@ export var WANDER_TARGET_RANGE = 4
 export var knockback_amount = 120
 
 enum{
-	IDEL,
+	IDLE,
 	WANDER,
 	CHASE
 }
 
 var motion = Vector2.ZERO
-var state = IDEL
+var state = IDLE
 
 onready var stats = $Stats
 onready var playerDetection = $PlayerDetection
@@ -21,17 +21,17 @@ onready var hurtbox = $Hurtbox
 onready var wanderController = $WanderController
 
 func _ready():
-	state = pick_random_state([IDEL, WANDER])
+	state = pick_random_state([IDLE, WANDER])
 # Start at a random state.
 
 func _physics_process(delta):
 	
 	match state:
-		IDEL:
+		IDLE:
 			motion = motion.move_toward(Vector2.ZERO, FRICTION * delta)
 		# If the enemy was moving, it will slow to a stop.
 			seek_player()
-		# The enemy searches for the player while in the "IDEL" state.
+		# The enemy searches for the player while in the "IDLE" state.
 			
 			if wanderController.get_time_left() == 0:
 				change_state()
@@ -56,7 +56,7 @@ func _physics_process(delta):
 			if player != null:
 				accelerate_towards_point(player.global_position, delta)
 			else:
-				state = IDEL
+				state = IDLE
 		# The enemy will move towards the player if the player is detected.
 				
 	motion = move_and_slide(motion)
@@ -67,9 +67,9 @@ func accelerate_towards_point(point, delta):
 # The enemy will move towards a specific point.
 	
 func change_state():
-	state = pick_random_state([IDEL, WANDER])
+	state = pick_random_state([IDLE, WANDER])
 	wanderController.start_wander_timer(rand_range(1, 3))
-# A random state between "IDEL", and "WANDER" is chosen then 
+# A random state between "IDLE", and "WANDER" is chosen then 
 # the timer is reset to a time between 1 and 3 seconds.
 
 func seek_player():
