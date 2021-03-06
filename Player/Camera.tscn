@@ -5,11 +5,13 @@
 [node name="Camera" type="Camera2D"]
 position = Vector2( 160, 90 )
 current = true
+smoothing_enabled = true
 script = ExtResource( 1 )
 
 [node name="Limits" type="Node" parent="."]
 
 [node name="TopLeft" type="Position2D" parent="Limits"]
+position = Vector2( -686.225, -292.17 )
 
 [node name="BottomRight" type="Position2D" parent="Limits"]
-position = Vector2( 320, 180 )
+position = Vector2( 989.743, 180 )

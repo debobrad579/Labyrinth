@@ -9,7 +9,9 @@ extents = Vector2( 3.92402, 9.71526 )
 radius = 4.71834
 height = 4.64114
 
-[node name="Player" type="KinematicBody2D"]
+[node name="Player" type="KinematicBody2D" groups=[
+"Players",
+]]
 collision_layer = 2
 script = ExtResource( 1 )
 __meta__ = {
