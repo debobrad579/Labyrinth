@@ -81,6 +81,15 @@ func floor_detected():
 		return(true)
 	else:
 		return(false)
+		
+func wall_slide():
+	if on_wall and Input.is_action_pressed(RIGHT):
+		return true
+	else:
+		if on_wall and Input.is_action_pressed(LEFT):
+			return true
+		else:
+			return false
 	
 # Main physics and process function
 func _physics_process(delta):
@@ -166,7 +175,7 @@ func _physics_process(delta):
 			motion.x = move_toward(motion.x, 0, AIR_RESISTANCE * delta)
 			
 		# If there are still double jumps left and they press jump
-		if double_jump > 0 and Input.is_action_just_pressed(JUMP) and not on_wall:
+		if double_jump > 0 and Input.is_action_just_pressed(JUMP) and wall_slide() == false:
 			
 			ACCELERATION = 500
 			
@@ -217,9 +226,8 @@ func _physics_process(delta):
 				wall_double_jump = false
 		
 		# Wall scaling (only if moving into it)
-		if motion.y >= 0 and x_input != 0:
+		if motion.y >= 0 and wall_slide():
 			motion.y = min(motion.y + WALL_SLIDE_ACCELERATION, MAX_WALL_SLIDE_SPEED)
-	
 	
 	var gravity_vector = Vector2(0, GRAVITY)
 	motion += gravity_vector * delta
@@ -227,7 +235,6 @@ func _physics_process(delta):
 
 func _on_WallDetector_body_entered(_body):
 	on_wall = true
-
 
 func _on_WallDetector_body_exited(_body):
 	on_wall = false
