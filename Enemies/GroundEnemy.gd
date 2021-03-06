@@ -62,7 +62,7 @@ func _physics_process(delta):
 
 func accelerate_towards_point(point, delta):
 	var direction = global_position.direction_to(point)
-	motion = motion.move_toward(direction * MAX_SPEED, ACCELERATION * delta)
+	motion.x = motion.move_toward(direction * MAX_SPEED, ACCELERATION * delta).x
 # The enemy will move towards a specific point.
 	
 func change_state():
@@ -79,3 +79,4 @@ func pick_random_state(state_list):
 	state_list.shuffle()
 	return state_list.pop_front()
 # This will pick a random state by shuffleing the states then picking the first one.
+
