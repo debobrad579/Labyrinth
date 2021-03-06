@@ -4,6 +4,7 @@ export var ACCELERATION = 300
 export var MAX_SPEED = 30
 export var FRICTION = 200
 export var WANDER_TARGET_RANGE = 4
+export var GRAVITY = 300
 
 enum{
 	IDEL,
@@ -18,6 +19,8 @@ onready var stats = $Stats
 onready var playerDetection = $PlayerDetection
 onready var hurtbox = $Hurtbox
 onready var wanderController = $WanderController
+onready var RwallDetector = $RightWallDetector
+onready var LwallDetector = $LeftWallDetector
 
 func _ready():
 	state = pick_random_state([IDEL, WANDER])
@@ -58,7 +61,18 @@ func _physics_process(delta):
 				state = IDEL
 		# The enemy will move towards the player if the player is detected.
 				
-	motion = move_and_slide(motion)
+	var gravity_vector = Vector2(0, GRAVITY)
+	motion += gravity_vector * delta
+	motion = move_and_slide(motion, -gravity_vector, true, 4, PI/4, false)
+	
+	if RwallDetector.is_colliding():
+		wanderController.startPosition.x = self.position.x - rand_range(16, 64)
+		wanderController.startPosition.y = self.position.y
+	if LwallDetector.is_colliding():
+		wanderController.startPosition.x = self.position.x + rand_range(16, 64)
+		wanderController.startPosition.y = self.position.y
+	# This is so the enemy won't continue trying to stay near the previouse startPosition after
+	# falling off a ledge.
 
 func accelerate_towards_point(point, delta):
 	var direction = global_position.direction_to(point)
