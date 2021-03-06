@@ -1,22 +1,25 @@
-[gd_scene load_steps=8 format=2]
 
-[ext_resource path="res://Player/Player.tscn" type="PackedScene" id=1]
-[ext_resource path="res://ReusableNodes/TileMap.tscn" type="PackedScene" id=2]
+[gd_scene load_steps=54 format=2]
+
+[ext_resource path="res://Player/Player1.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Graphics/Tile Set v1.0.png" type="Texture" id=2]
 [ext_resource path="res://Player/Camera.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Enemies/FlyingEnemy.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Enemies/GroundEnemy.tscn" type="PackedScene" id=5]
-[ext_resource path="res://Enemies/BasicGroundEnemy.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Player/Player2.tscn" type="PackedScene" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 10, 109.364 )
 
 [node name="Main" type="Node2D"]
 
-[node name="Player" parent="." instance=ExtResource( 1 )]
-position = Vector2( 176, 56 )
+[node name="Player2" parent="." groups=[
+"Players",
+] instance=ExtResource( 4 )]
+position = Vector2( 196.929, 31.1127 )
 
-[node name="RemoteTransform" parent="Player" index="8"]
-remote_path = NodePath("../../Camera")
+[node name="Player1" parent="." groups=[
+"Players",
+] instance=ExtResource( 1 )]
+position = Vector2( 158.745, 30.7591 )
 
 [node name="TileMap" parent="." instance=ExtResource( 2 )]
 tile_data = PoolIntArray( -1, 0, 0, -65536, 0, 2, 65535, 0, 65536, 0, 0, 65538, 131071, 0, 65536, 65536, 0, 65538, 196607, 0, 65536, 131072, 0, 65538, 131075, 0, 0, 131076, 0, 2, 262143, 0, 65536, 196608, 0, 65538, 196611, 0, 65536, 196612, 0, 65538, 327679, 0, 65536, 262144, 0, 65538, 262147, 0, 65536, 262148, 0, 65538, 262153, 0, 0, 262154, 0, 1, 262155, 0, 1, 262156, 0, 2, 393215, 0, 65536, 327680, 0, 65538, 327683, 0, 65536, 327684, 0, 65538, 327689, 0, 131072, 327690, 0, 131073, 327691, 0, 131073, 327692, 0, 131074, 458751, 0, 65536, 393216, 0, 65538, 393219, 0, 65536, 393220, 0, 65538, 393234, 0, 0, 393235, 0, 1, 393236, 0, 1, 393237, 0, 1, 393238, 0, 1, 393239, 0, 1, 393240, 0, 1, 393241, 0, 1, 393242, 0, 1, 393243, 0, 1, 393244, 0, 1, 393245, 0, 1, 393246, 0, 1, 393247, 0, 2, 524287, 0, 65536, 458752, 0, 65538, 458755, 0, 131072, 458756, 0, 131074, 458770, 0, 65536, 458771, 0, 65537, 458772, 0, 65537, 458773, 0, 65537, 458774, 0, 65537, 458775, 0, 65537, 458776, 0, 65537, 458777, 0, 65537, 458778, 0, 65537, 458779, 0, 65537, 458780, 0, 65537, 458781, 0, 65537, 458782, 0, 65537, 458783, 0, 65538, 589823, 0, 65536, 524288, 0, 65538, 524306, 0, 65536, 524307, 0, 65537, 524308, 0, 65537, 524309, 0, 65537, 524310, 0, 65537, 524311, 0, 65537, 524312, 0, 65537, 524313, 0, 65537, 524314, 0, 65537, 524315, 0, 65537, 524316, 0, 65537, 524317, 0, 65537, 524318, 0, 65537, 524319, 0, 65538, 655359, 0, 65536, 589824, 0, 65538, 589842, 0, 65536, 589843, 0, 65537, 589844, 0, 65537, 589845, 0, 65537, 589846, 0, 65537, 589847, 0, 65537, 589848, 0, 65537, 589849, 0, 65537, 589850, 0, 65537, 589851, 0, 65537, 589852, 0, 65537, 589853, 0, 65537, 589854, 0, 65537, 589855, 0, 65538, 720895, 0, 65536, 655360, 0, 131077, 655361, 0, 1, 655362, 0, 1, 655363, 0, 1, 655364, 0, 1, 655365, 0, 1, 655366, 0, 1, 655367, 0, 1, 655368, 0, 1, 655369, 0, 1, 655370, 0, 1, 655371, 0, 1, 655372, 0, 1, 655373, 0, 1, 655374, 0, 1, 655375, 0, 1, 655376, 0, 1, 655377, 0, 1, 655378, 0, 131078, 655379, 0, 65537, 655380, 0, 65537, 655381, 0, 65537, 655382, 0, 65537, 655383, 0, 65537, 655384, 0, 65537, 655385, 0, 65537, 655386, 0, 65537, 655387, 0, 65537, 655388, 0, 65537, 655389, 0, 65537, 655390, 0, 65537, 655391, 0, 131077, 655392, 0, 1, 655393, 0, 1, 655394, 0, 1, 655395, 0, 1, 655396, 0, 2, 786431, 0, 131072, 720896, 0, 131073, 720897, 0, 131073, 720898, 0, 131073, 720899, 0, 131073, 720900, 0, 131073, 720901, 0, 131073, 720902, 0, 131073, 720903, 0, 131073, 720904, 0, 131073, 720905, 0, 131073, 720906, 0, 131073, 720907, 0, 131073, 720908, 0, 131073, 720909, 0, 131073, 720910, 0, 131073, 720911, 0, 131073, 720912, 0, 131073, 720913, 0, 131073, 720914, 0, 131073, 720915, 0, 131073, 720916, 0, 131073, 720917, 0, 131073, 720918, 0, 131073, 720919, 0, 131073, 720920, 0, 131073, 720921, 0, 131073, 720922, 0, 131073, 720923, 0, 131073, 720924, 0, 131073, 720925, 0, 131073, 720926, 0, 131073, 720927, 0, 131073, 720928, 0, 131073, 720929, 0, 131073, 720930, 0, 131073, 720931, 0, 131073, 720932, 0, 131074 )
@@ -30,24 +33,14 @@ rotation = 0.349066
 shape = SubResource( 1 )
 
 [node name="Camera" parent="." instance=ExtResource( 3 )]
-position = Vector2( 176, 56 )
+position = Vector2( 159.513, 67.4094 )
+smoothing_enabled = true
 
 [node name="TopLeft" parent="Camera/Limits" index="0"]
 position = Vector2( -416, -216 )
 
 [node name="BottomRight" parent="Camera/Limits" index="1"]
 position = Vector2( 1136, 192 )
-
-[node name="MainEnemy" parent="." instance=ExtResource( 4 )]
-position = Vector2( 64, 8 )
-
-[node name="GroundEnemy" parent="." instance=ExtResource( 5 )]
-position = Vector2( 400, 88 )
-
-[node name="BasicGroundEnemy" parent="." instance=ExtResource( 6 )]
-position = Vector2( 264, 152 )
-
-[editable path="Player"]
 
 [editable path="Camera"]
 

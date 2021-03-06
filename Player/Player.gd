@@ -1,5 +1,46 @@
 extends KinematicBody2D
 
+# Player id. Note that it is exported, so this value can be 
+# Adjusted for Player1 scene and Player2 scene to 0 and 1 respectively.
+# See _ready() function below
+export var player_id = 0 #0 is player 1... 1 is player 2
+
+# Set up input map variables
+var LEFT
+var RIGHT
+var JUMP
+var DASH
+
+# When the players id is changed, adopt appropriate input map.
+# Characteers with an id that is no p1 or p2 would be assigned a blank
+# Input map so they do not move.
+func change_player_id(id):
+	
+	player_id = id
+	
+	if player_id == 0:
+		
+		LEFT = "walk_left_p1"
+		RIGHT = "walk_right_p1"
+		JUMP = "jump_p1"
+		DASH = "dash_p1"
+	
+	elif player_id == 1:
+		
+		LEFT = "walk_left_p2"
+		RIGHT = "walk_right_p2"
+		JUMP = "jump_p2"
+		DASH = "dash_p2"
+		
+	else:
+		
+		LEFT = ""
+		RIGHT = ""
+		JUMP = ""
+		DASH = ""
+
+
+
 # Export Constants
 export var ACCELERATION = 500
 export var MAX_SPEED = 90
@@ -29,6 +70,12 @@ var double_jump = DOUBLE_JUMP_TOTAL
 var wall_double_jump = true
 var can_resist = false
 
+# When ready, change the id and input maps to the cooresponding ones.
+func _ready():
+	change_player_id(player_id)
+	add_to_group("Players", true)
+
+
 func floor_detected():
 	if is_on_floor() or LfloorDetector.is_colliding() or RfloorDetector.is_colliding():
 		return(true)
@@ -39,11 +86,11 @@ func floor_detected():
 func _physics_process(delta):
 	
 	# If they jump slightly before ground contact, they will jump on contact.
-	if floor_detected() == false and Input.is_action_just_pressed("jump"):
+	if floor_detected() == false and Input.is_action_just_pressed(JUMP):
 		jumpTimer.start()
 	
 	# Set the horizontal input
-	var x_input = Input.get_action_strength("walk_right") - Input.get_action_strength("walk_left")
+	var x_input = Input.get_action_strength(RIGHT) - Input.get_action_strength(LEFT)
 	
 	# If there is horizontal input
 	# Changed so that player cannot move "up walls" aka really steep slopes
@@ -89,7 +136,7 @@ func _physics_process(delta):
 			motion.x = move_toward(motion.x, 0, FRICTION * delta)
 		
 		# If jump is pressed (and on floor)
-		if Input.is_action_just_pressed("jump"):
+		if Input.is_action_just_pressed(JUMP):
 			
 			# Set y velocity/motion to jump force (up) and on_floor to false.
 			motion.y = -JUMP_FORCE
@@ -109,7 +156,7 @@ func _physics_process(delta):
 		
 		# If jump is released too soon, cut jump force by half (only if jump force
 		# Exceeds half value, though).
-		if Input.is_action_just_released("jump") and motion.y < -JUMP_FORCE/2 and wall_jump == false:
+		if Input.is_action_just_released(JUMP) and motion.y < -JUMP_FORCE/2 and wall_jump == false:
 			motion.y = -JUMP_FORCE/2
 		
 		# If no horizontal input,
@@ -119,7 +166,7 @@ func _physics_process(delta):
 			motion.x = move_toward(motion.x, 0, AIR_RESISTANCE * delta)
 			
 		# If there are still double jumps left and they press jump
-		if double_jump > 0 and Input.is_action_just_pressed("jump") and not on_wall:
+		if double_jump > 0 and Input.is_action_just_pressed(JUMP) and not on_wall:
 			
 			ACCELERATION = 500
 			
@@ -140,7 +187,7 @@ func _physics_process(delta):
 	if on_wall and floor_detected() == false:
 		
 		# If jump is pressed and the player is pressing a key.
-		if Input.is_action_just_pressed("jump") and x_input != 0:
+		if Input.is_action_just_pressed(JUMP) and x_input != 0:
 			
 			AIR_RESISTANCE = 70
 			
