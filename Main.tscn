@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://ReusableNodes/TileMap.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Player/Camera.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Player/Player1.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Enemies/FlyingEnemy.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Player/Player2.tscn" type="PackedScene" id=5]
 
 [node name="Main" type="Node2D"]
 
@@ -12,4 +14,10 @@ tile_data = PoolIntArray( -393217, 0, 0, -458752, 0, 2, -458748, 0, 0, -458747, 
 [node name="Player1" parent="." instance=ExtResource( 3 )]
 position = Vector2( 149.671, 22.2725 )
 
+[node name="Player2" parent="." instance=ExtResource( 5 )]
+position = Vector2( 181.726, 26.1629 )
+
 [node name="Camera" parent="." instance=ExtResource( 2 )]
+
+[node name="FlyingEnemy" parent="." instance=ExtResource( 4 )]
+position = Vector2( 38.5454, 30.4806 )

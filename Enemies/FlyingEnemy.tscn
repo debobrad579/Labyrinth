@@ -38,8 +38,10 @@ shape = SubResource( 2 )
 [node name="WanderController" parent="." instance=ExtResource( 6 )]
 
 [node name="ObjectDetector" type="RayCast2D" parent="."]
-visible = false
 enabled = true
-cast_to = Vector2( 0, 8.5 )
+
+[node name="PursuitTimer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
 
 [editable path="PlayerDetection"]
