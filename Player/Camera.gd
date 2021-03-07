@@ -21,6 +21,7 @@ var scaler = 1
 export var zoom_lerp_rate = 0.01
 export var pixel_stretch_point = 170
 export var max_scale = 2
+export var min_scale = 1.2
 
 # For physics processs (yay!)
 func _physics_process(delta):
@@ -44,7 +45,7 @@ func _physics_process(delta):
 		
 		# If distance scale is greater than 1 (players are past pixel stretch point)
 		# Then scale up
-		if distance_scale > 1:
+		if distance_scale > min_scale:
 			
 			# Don't scale past max_scale (Screen cannot be larger than that scale level)
 			if distance_scale > max_scale:
@@ -61,7 +62,7 @@ func _physics_process(delta):
 		# scale back to 1
 		else:
 			
-			scaler = lerp(scaler, 1, zoom_lerp_rate)
+			scaler = lerp(scaler, min_scale, zoom_lerp_rate)
 		
 		# Zoom, a vecotor, is multiplied by the scaler, or the scale value
 		zoom = Vector2(1, 1) * scaler

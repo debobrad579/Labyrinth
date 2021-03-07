@@ -30,6 +30,7 @@ shape = SubResource( 1 )
 [node name="Hurtbox" parent="." instance=ExtResource( 4 )]
 
 [node name="PlayerDetection" parent="." instance=ExtResource( 5 )]
+visible = false
 
 [node name="CollisionShape2D" parent="PlayerDetection" index="0"]
 modulate = Color( 1, 1, 1, 0.286275 )
@@ -38,6 +39,7 @@ shape = SubResource( 2 )
 [node name="WanderController" parent="." instance=ExtResource( 6 )]
 
 [node name="ObjectDetector" type="RayCast2D" parent="."]
+visible = false
 enabled = true
 
 [node name="PursuitTimer" type="Timer" parent="."]
