@@ -18,6 +18,7 @@ onready var stats = $Stats
 onready var playerDetection = $PlayerDetection
 onready var hurtbox = $Hurtbox
 onready var wanderController = $WanderController
+onready var objectDetector = $ObjectDetector
 
 func _ready():
 	state = pick_random_state([IDLE, WANDER])
@@ -62,8 +63,10 @@ func _physics_process(delta):
 
 func accelerate_towards_point(point, delta):
 	var direction = global_position.direction_to(point)
+	objectDetector.cast_to = direction * 8.5
 	motion = motion.move_toward(direction * MAX_SPEED, ACCELERATION * delta)
-# The enemy will move towards a specific point.
+	if objectDetector.is_colliding():
+		motion = direction * global_position - point
 	
 func change_state():
 	state = pick_random_state([IDLE, WANDER])

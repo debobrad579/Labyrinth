@@ -14,7 +14,7 @@ height = 0.0
 [sub_resource type="CircleShape2D" id=2]
 radius = 96.0
 
-[node name="MainEnemy" type="KinematicBody2D"]
+[node name="FlyingEnemy" type="KinematicBody2D"]
 collision_layer = 16
 script = ExtResource( 1 )
 
@@ -36,5 +36,10 @@ modulate = Color( 1, 1, 1, 0.286275 )
 shape = SubResource( 2 )
 
 [node name="WanderController" parent="." instance=ExtResource( 6 )]
+
+[node name="ObjectDetector" type="RayCast2D" parent="."]
+visible = false
+enabled = true
+cast_to = Vector2( 0, 8.5 )
 
 [editable path="PlayerDetection"]
