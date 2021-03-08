@@ -10,6 +10,7 @@ var LEFT
 var RIGHT
 var JUMP
 var DASH
+var ATTACK
 
 # When the players id is changed, adopt appropriate input map.
 # Characteers with an id that is no p1 or p2 would be assigned a blank
@@ -24,6 +25,7 @@ func change_player_id(id):
 		RIGHT = "walk_right_p1"
 		JUMP = "jump_p1"
 		DASH = "dash_p1"
+		ATTACK = "attack_p1"
 	
 	elif player_id == 1:
 		
@@ -31,6 +33,8 @@ func change_player_id(id):
 		RIGHT = "walk_right_p2"
 		JUMP = "jump_p2"
 		DASH = "dash_p2"
+		ATTACK = "attack_p2"
+	# We will change the button maping for the final game.
 		
 	else:
 		
@@ -55,10 +59,14 @@ export var DOUBLE_JUMP_TOTAL = 1
 # Preload Nodes
 onready var coyoteTimer = $CoyoteTimer
 onready var moveTimer = $WallJumpTimer
+onready var attackTimer = $AttackTimer
 onready var wallChecker = $WallChecker
 onready var LfloorDetector = $LeftFloorDetector
 onready var RfloorDetector = $RightFloorDetector
 onready var jumpTimer = $JumpTimer
+onready var attackPivot = $BasicAttackPivot
+onready var attack_hitbox = $BasicAttackPivot/BasicAttack/CollisionShape2D
+onready var attack_hitbox2 = $BasicAttackPivot/BasicAttack
 
 # Player Platforming Variables
 var motion = Vector2.ZERO
@@ -69,12 +77,13 @@ var wall_jump = false
 var double_jump = DOUBLE_JUMP_TOTAL
 var wall_double_jump = true
 var can_resist = false
+var direction_facing = 0
 
 # When ready, change the id and input maps to the cooresponding ones.
 func _ready():
 	change_player_id(player_id)
 	add_to_group("Players", true)
-
+	attack_hitbox2.knockback_2 = direction_facing
 
 func floor_detected():
 	if is_on_floor() or LfloorDetector.is_colliding() or RfloorDetector.is_colliding():
@@ -93,6 +102,19 @@ func wall_slide():
 	
 # Main physics and process function
 func _physics_process(delta):
+	
+	if Input.is_action_just_pressed(ATTACK):
+		attackPivot.rotation_degrees = 180 * direction_facing
+		attack_hitbox.disabled = false
+		attackTimer.start()
+	
+	if Input.is_action_pressed(LEFT) and not Input.is_action_pressed(RIGHT):
+		direction_facing = 1
+		attack_hitbox2.knockback_2 = 1
+	
+	if Input.is_action_pressed(RIGHT) and not Input.is_action_pressed(LEFT):
+		direction_facing = 0
+		attack_hitbox2.knockback_2 = 0
 	
 	# If they jump slightly before ground contact, they will jump on contact.
 	if floor_detected() == false and Input.is_action_just_pressed(JUMP):
@@ -244,3 +266,6 @@ func _on_WallJumpTimer_timeout():
 	can_move = true
 	AIR_RESISTANCE = 250
 	ACCELERATION = 200
+
+func _on_AttackTimer_timeout():
+	attack_hitbox.disabled = true

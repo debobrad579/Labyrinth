@@ -7,8 +7,10 @@ export var GRAVITY = 300
 
 onready var RwallDetector = $RightWallDetector
 onready var LwallDetector = $LeftWallDetector
+onready var stats = $Stats
 
 var motion = Vector2.ZERO
+var knockback = Vector2.ZERO
 var direction = -1
 
 func _physics_process(delta):
@@ -25,4 +27,12 @@ func _physics_process(delta):
 	motion += gravity_vector * delta
 	motion = move_and_slide(motion, -gravity_vector, true, 4, PI/4, false)
 	
+func _on_Hurtbox_area_entered(area):
+	stats.health -= 1
+	if area.knockback_2 == 0:
+		knockback = Vector2.RIGHT * 150
+	else:
+		knockback = Vector2.LEFT * 150
 
+func _on_Stats_no_health():
+	queue_free()

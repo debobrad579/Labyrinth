@@ -6,12 +6,15 @@ extends Area2D
 # When they exit, they are removed.
 # The monster can_see_player whenever the list has contents (i.e. at least one person)
 var players = []
+var player
 
 func can_see_player():
 	return players != []
 
 func _on_PlayerDetection_body_entered(body):
 	players.append(body)
+	player = body
 
 func _on_PlayerDetection_body_exited(body):
 	players.erase(body)
+	player = null

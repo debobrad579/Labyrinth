@@ -1,4 +1,4 @@
-extends Node2D
+extends Node
 
 export(int) var maxHealth = 1 setget set_max_health
 var health = maxHealth setget set_health

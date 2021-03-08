@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Player/Player.gd" type="Script" id=1]
+[ext_resource path="res://Player/BasicAttack.gd" type="Script" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 3.92402, 9.71526 )
@@ -8,6 +9,10 @@ extents = Vector2( 3.92402, 9.71526 )
 [sub_resource type="CapsuleShape2D" id=2]
 radius = 4.71834
 height = 4.64114
+
+[sub_resource type="CapsuleShape2D" id=3]
+radius = 3.93126
+height = 7.22008
 
 [node name="Player" type="KinematicBody2D" groups=[
 "Players",
@@ -41,6 +46,10 @@ one_shot = true
 wait_time = 0.1
 one_shot = true
 
+[node name="AttackTimer" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
+
 [node name="WallChecker" type="RayCast2D" parent="."]
 visible = false
 enabled = true
@@ -58,6 +67,19 @@ visible = false
 position = Vector2( -2.6, 0 )
 enabled = true
 cast_to = Vector2( 0, 9.75 )
+
+[node name="BasicAttackPivot" type="Node2D" parent="."]
+
+[node name="BasicAttack" type="Area2D" parent="BasicAttackPivot"]
+position = Vector2( 9.51073, 0.0834293 )
+collision_layer = 32
+collision_mask = 4
+script = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BasicAttackPivot/BasicAttack"]
+shape = SubResource( 3 )
+disabled = true
 [connection signal="body_entered" from="WallDetector" to="." method="_on_WallDetector_body_entered"]
 [connection signal="body_exited" from="WallDetector" to="." method="_on_WallDetector_body_exited"]
 [connection signal="timeout" from="WallJumpTimer" to="." method="_on_WallJumpTimer_timeout"]
+[connection signal="timeout" from="AttackTimer" to="." method="_on_AttackTimer_timeout"]
