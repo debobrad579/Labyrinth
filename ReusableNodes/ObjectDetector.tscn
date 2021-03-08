@@ -1,0 +1,4 @@
+[gd_scene format=2]
+
+[node name="ObjectDetector" type="RayCast2D"]
+enabled = true

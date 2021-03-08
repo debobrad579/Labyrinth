@@ -39,19 +39,20 @@ onready var pursuitTimer = $PursuitTimer
 # Will attempt to load in Player1 and Player2 from the current scene. If
 # Neither are present in the scene, they will return "null". (This is important
 # for single player mode
-onready var player1 = get_node_or_null('../Player1')
-onready var player2 = get_node_or_null('../Player2')
+onready var players = get_tree().get_nodes_in_group("Players")
 
 func _ready():
 	state = pick_random_state([IDLE, WANDER])
+	
+	print(players)
 	
 	# NOTE!! ----------------------------------------------------------------------
 	# Due to a weird bug, the raycast won't initialize properly until the first
 	# cast change, meaning if this isn't included, then the first time a player
 	# enters the monster radius, even if there is a wall in the way, it will trigger
 	# the chase scene before recognizing the wall. This somehow fixes that. -------
-	if player1 != null: # <-- This is just to make sure that a crash error doesn't happen if the player doesn't load
-		objectDetector.cast_to = player1.position - position
+	if players.size() > 0: # <-- This is just to make sure that a crash error doesn't happen if the player doesn't load
+		objectDetector.cast_to = players[0].position - position
 # Start at a random state.
 
 func _physics_process(delta):
@@ -127,14 +128,15 @@ func change_state():
 # OF SIGHT HAPPENS!
 func seek_player():
 	if playerDetection.can_see_player():
-	
+		
+		if players.size() > 0:
 		# So if a player is detected, then it will check which
 		# player is the first on the player detection list.
 		# This is then assigned as the "target_player".
-		if player1 == playerDetection.players[0]:
-			target_player = player1
-		elif player2 == playerDetection.players[0]:
-			target_player = player2
+			if players[0] == playerDetection.players[0]:
+				target_player = players[0]
+			elif players[1] == playerDetection.players[0]:
+				target_player = players[1]
 		
 		# Cast the raycast at the target player (position is different from
 		# cast_to. Cast_to is the tip relative to position. In this case
@@ -143,7 +145,8 @@ func seek_player():
 		# monsters. Without the - position (minus monster's position) the
 		# tip will not go to the player, but to the player + the monsters position
 		# from the origin.
-		objectDetector.cast_to = target_player.position - position
+		if target_player != null:
+			objectDetector.cast_to = target_player.position - position
 		
 		# If not colliding, set aim and chase.
 		if not objectDetector.is_colliding():
