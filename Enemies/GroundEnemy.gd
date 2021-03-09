@@ -28,6 +28,8 @@ func _ready():
 # Start at a random state.
 
 func _physics_process(delta):
+	knockback = knockback.move_toward(Vector2.ZERO, FRICTION * delta)
+	knockback = move_and_slide(knockback)
 	
 	match state:
 		IDEL:
@@ -98,9 +100,9 @@ func pick_random_state(state_list):
 func _on_Hurtbox_area_entered(area):
 	stats.health -= 1
 	if area.knockback_2 == 0:
-		knockback = Vector2.RIGHT * 150
+		knockback = Vector2(150, -100)
 	else:
-		knockback = Vector2.LEFT * 150
+		knockback = Vector2(-150, -100)
 
 func _on_Stats_no_health():
 	queue_free()
