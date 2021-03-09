@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://Player/BasicAttack.gd" type="Script" id=2]
+[ext_resource path="res://ReusableNodes/Stats.tscn" type="PackedScene" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 3.92402, 9.71526 )
@@ -13,6 +14,9 @@ height = 4.64114
 [sub_resource type="CapsuleShape2D" id=3]
 radius = 3.93126
 height = 7.22008
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 3.43045, 9.20993 )
 
 [node name="Player" type="KinematicBody2D" groups=[
 "Players",
@@ -79,7 +83,19 @@ script = ExtResource( 2 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BasicAttackPivot/BasicAttack"]
 shape = SubResource( 3 )
 disabled = true
+
+[node name="PlayerHurtbox" type="Area2D" parent="."]
+collision_layer = 64
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerHurtbox"]
+shape = SubResource( 4 )
+
+[node name="Stats" parent="." instance=ExtResource( 3 )]
+maxHealth = 5
 [connection signal="body_entered" from="WallDetector" to="." method="_on_WallDetector_body_entered"]
 [connection signal="body_exited" from="WallDetector" to="." method="_on_WallDetector_body_exited"]
 [connection signal="timeout" from="WallJumpTimer" to="." method="_on_WallJumpTimer_timeout"]
 [connection signal="timeout" from="AttackTimer" to="." method="_on_AttackTimer_timeout"]
+[connection signal="area_entered" from="PlayerHurtbox" to="." method="_on_PlayerHurtbox_area_entered"]
+[connection signal="no_health" from="Stats" to="." method="_on_Stats_no_health"]

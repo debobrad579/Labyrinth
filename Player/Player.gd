@@ -67,6 +67,7 @@ onready var jumpTimer = $JumpTimer
 onready var attackPivot = $BasicAttackPivot
 onready var attack_hitbox = $BasicAttackPivot/BasicAttack/CollisionShape2D
 onready var attack_hitbox2 = $BasicAttackPivot/BasicAttack
+onready var stats = $Stats
 
 # Player Platforming Variables
 var motion = Vector2.ZERO
@@ -269,3 +270,10 @@ func _on_WallJumpTimer_timeout():
 
 func _on_AttackTimer_timeout():
 	attack_hitbox.disabled = true
+
+func _on_PlayerHurtbox_area_entered(area):
+	stats.health -= area.damage
+	print("hi")
+
+func _on_Stats_no_health():
+	queue_free()

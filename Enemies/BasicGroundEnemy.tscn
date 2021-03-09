@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Enemies/BasicGroundEnemy.gd" type="Script" id=1]
 [ext_resource path="res://ReusableNodes/Hitbox.tscn" type="PackedScene" id=2]
@@ -9,6 +9,9 @@
 extents = Vector2( 8, 8 )
 
 [sub_resource type="RectangleShape2D" id=2]
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 8, 8 )
 
 [node name="BasicGroundEnemy" type="KinematicBody2D"]
 collision_layer = 16
@@ -25,6 +28,11 @@ collision_mask = 32
 shape = SubResource( 2 )
 
 [node name="Hitbox" parent="." instance=ExtResource( 2 )]
+collision_layer = 8
+collision_mask = 64
+
+[node name="CollisionShape2D" parent="Hitbox" index="0"]
+shape = SubResource( 3 )
 
 [node name="Stats" parent="." instance=ExtResource( 3 )]
 maxHealth = 3
@@ -46,3 +54,5 @@ cast_to = Vector2( 0, 8.05 )
 [connection signal="no_health" from="Stats" to="." method="_on_Stats_no_health"]
 
 [editable path="Hurtbox"]
+
+[editable path="Hitbox"]

@@ -129,6 +129,8 @@ attack_p2={
 2d_physics/layer_4="enemy hitbox"
 2d_physics/layer_5="enemy"
 2d_physics/layer_6="weapon hitbox"
+2d_physics/layer_7="player hurtbox"
+2d_physics/layer_8="player hitbox"
 
 [rendering]
 
