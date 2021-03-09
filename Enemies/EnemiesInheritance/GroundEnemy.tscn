@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Enemies/EnemiesInheritance/Enemy.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Enemies/EnemiesInheritance/GroundEnemy.gd" type="Script" id=2]
+
+[node name="GroundEnemy" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+
+[node name="WallDetectors" type="Node2D" parent="." index="8"]
+
+[node name="RightWallDetector" type="RayCast2D" parent="WallDetectors" index="0"]
+enabled = true
+cast_to = Vector2( 10, 0 )
+
+[node name="LeftWallDetector" type="RayCast2D" parent="WallDetectors" index="1"]
+enabled = true
+cast_to = Vector2( -10, 0 )
+
+[editable path="Hurtbox"]
+
+[editable path="Hitbox"]
+
+[editable path="PlayerDetection"]
