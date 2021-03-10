@@ -44,8 +44,6 @@ onready var players = get_tree().get_nodes_in_group("Players")
 func _ready():
 	state = pick_random_state([IDLE, WANDER])
 	
-	print(players)
-	
 	# NOTE!! ----------------------------------------------------------------------
 	# Due to a weird bug, the raycast won't initialize properly until the first
 	# cast change, meaning if this isn't included, then the first time a player

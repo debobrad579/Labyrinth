@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Enemy.gd" type="Script" id=1]
+[ext_resource path="res://Enemies/EnemiesInheritance/Enemy.tscn" type="PackedScene" id=2]
+
+[sub_resource type="CircleShape2D" id=1]
+
+[sub_resource type="CircleShape2D" id=2]
+radius = 114.543
+
+[node name="Enemy" instance=ExtResource( 2 )]
+script = ExtResource( 1 )
+AIR_BORNE = true
+AI = true
+
+[node name="CollisionShape2D" parent="." index="0"]
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D" parent="PlayerDetection" index="0"]
+shape = SubResource( 2 )
+
+[node name="WanderController" parent="." index="6"]
+WANDER_RANGE = 64
+
+[editable path="Hurtbox"]
+
+[editable path="Hitbox"]
+
+[editable path="PlayerDetection"]

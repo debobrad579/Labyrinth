@@ -13,9 +13,15 @@ _global_script_classes=[ {
 "class": "DefaultEnemy",
 "language": "GDScript",
 "path": "res://Enemies/EnemiesInheritance/Enemy.gd"
+}, {
+"base": "Node",
+"class": "EntityStats",
+"language": "GDScript",
+"path": "res://ReusableNodes/Stats.gd"
 } ]
 _global_script_class_icons={
-"DefaultEnemy": ""
+"DefaultEnemy": "",
+"EntityStats": ""
 }
 
 [application]

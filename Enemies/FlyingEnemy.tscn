@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Enemies/FlyingEnemyAI.gd" type="Script" id=1]
 [ext_resource path="res://ReusableNodes/Stats.tscn" type="PackedScene" id=2]
@@ -7,7 +7,6 @@
 [ext_resource path="res://ReusableNodes/PlayerDetection.tscn" type="PackedScene" id=5]
 [ext_resource path="res://ReusableNodes/WanderController.tscn" type="PackedScene" id=6]
 [ext_resource path="res://ReusableNodes/ObjectDetector.tscn" type="PackedScene" id=7]
-[ext_resource path="res://ReusableNodes/Hitbox.gd" type="Script" id=8]
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 8.0
@@ -37,13 +36,11 @@ maxHealth = 5
 [node name="Hitbox" parent="." instance=ExtResource( 3 )]
 collision_layer = 8
 collision_mask = 64
-script = ExtResource( 8 )
 
 [node name="CollisionShape2D" parent="Hitbox" index="0"]
 shape = SubResource( 2 )
 
 [node name="Hurtbox" parent="." instance=ExtResource( 4 )]
-collision_layer = 4
 collision_mask = 32
 
 [node name="CollisionShape2D" parent="Hurtbox" index="0"]

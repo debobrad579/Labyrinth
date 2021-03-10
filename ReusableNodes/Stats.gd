@@ -1,3 +1,4 @@
+class_name EntityStats
 extends Node
 
 export(int) var maxHealth = 1 setget set_max_health

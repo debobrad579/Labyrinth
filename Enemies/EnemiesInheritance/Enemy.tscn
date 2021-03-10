@@ -9,6 +9,7 @@
 [ext_resource path="res://Enemies/EnemiesInheritance/Enemy.gd" type="Script" id=7]
 
 [node name="Enemy" type="KinematicBody2D"]
+collision_layer = 16
 script = ExtResource( 7 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -26,6 +27,12 @@ script = ExtResource( 7 )
 [node name="WanderController" parent="." instance=ExtResource( 6 )]
 
 [node name="ObjectDetector" parent="." instance=ExtResource( 1 )]
+
+[node name="PursuitTimer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+[connection signal="no_health" from="Stats" to="." method="_on_Stats_no_health"]
+[connection signal="area_entered" from="Hurtbox" to="." method="_on_Hurtbox_area_entered"]
 
 [editable path="Hurtbox"]
 
