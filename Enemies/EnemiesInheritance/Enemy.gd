@@ -42,8 +42,6 @@ func _ready():
 func _physics_process(delta):
 	knockback = knockback.move_toward(Vector2.ZERO, FRICTION * delta)
 	knockback = move_and_slide(knockback)
-	print(motion.x)
-	print(state)
 	if AI == true:
 		match state:
 			IDLE:
@@ -95,7 +93,6 @@ func _physics_process(delta):
 				# Note that this acts like the monster keeps moving in a given
 				# direction. I can explain this more if you want.
 				accelerate_towards_point(position + aim, delta)
-				print(aim)
 	if AIR_BORNE == false:
 		var gravity_vector = Vector2(0, GRAVITY)
 		motion += gravity_vector * delta
@@ -135,7 +132,6 @@ func accelerate_towards_point(point, delta):
 		motion = motion.move_toward(direction * MAX_SPEED, ACCELERATION * delta)
 	else:
 		motion.x = motion.move_toward(direction * MAX_SPEED, ACCELERATION * delta).x
-			
 func change_state():
 	state = pick_random_state([IDLE, WANDER])
 	wanderController.start_wander_timer(rand_range(1, 3))
