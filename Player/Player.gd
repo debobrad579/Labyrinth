@@ -275,7 +275,7 @@ func _on_AttackTimer_timeout():
 	attack_hitbox.disabled = true
 
 func _on_Stats_no_health():
-	emit_signal("player_died")
+	remove_from_group("Players")
 	queue_free()
 
 func _on_Hurtbox_area_entered(area):
