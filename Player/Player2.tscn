@@ -6,3 +6,5 @@
 [node name="Player2" instance=ExtResource( 2 )]
 script = ExtResource( 1 )
 player_id = 1
+
+[editable path="Hurtbox"]

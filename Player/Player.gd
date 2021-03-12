@@ -81,6 +81,8 @@ var wall_double_jump = true
 var can_resist = false
 var direction_facing = 0
 
+signal player_died
+
 # When ready, change the id and input maps to the cooresponding ones.
 func _ready():
 	change_player_id(player_id)
@@ -273,6 +275,7 @@ func _on_AttackTimer_timeout():
 	attack_hitbox.disabled = true
 
 func _on_Stats_no_health():
+	emit_signal("player_died")
 	queue_free()
 
 func _on_Hurtbox_area_entered(area):
