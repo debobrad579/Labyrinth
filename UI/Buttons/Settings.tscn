@@ -3,6 +3,8 @@
 [ext_resource path="res://UI/Buttons/MenuButton.tscn" type="PackedScene" id=1]
 
 [node name="Settings" instance=ExtResource( 1 )]
+margin_right = 56.0
+rect_min_size = Vector2( 56, 20 )
 SCENE_TO_LOAD = "res://UI/TitleScreen/SettingsPage.tscn"
 
 [node name="Label" parent="." index="0"]
