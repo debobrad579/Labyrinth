@@ -32,4 +32,5 @@ func _fade_finished():
 	get_tree().change_scene(SCENE_TO_LOAD)
 
 func _on_Timer_timeout():
-	get_tree().change_scene(SCENE_TO_LOAD)
+	if SCENE_TO_LOAD != null:
+		get_tree().change_scene(SCENE_TO_LOAD)

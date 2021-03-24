@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://UI/chary___.ttf" type="DynamicFontData" id=1]
-[ext_resource path="res://UI/Buttons/Difficulty.tscn" type="PackedScene" id=2]
+[ext_resource path="res://UI/Buttons/Game.tscn" type="PackedScene" id=2]
 [ext_resource path="res://UI/Buttons/Back.tscn" type="PackedScene" id=3]
 [ext_resource path="res://UI/TitleScreen/SettingsPage.gd" type="Script" id=4]
+[ext_resource path="res://UI/Buttons/Sound.tscn" type="PackedScene" id=5]
 
 [sub_resource type="DynamicFont" id=1]
 size = 30
@@ -21,6 +22,9 @@ __meta__ = {
 anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color( 0.345098, 0.545098, 0.682353, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Menu" type="VBoxContainer" parent="."]
 margin_left = 32.0
@@ -52,14 +56,9 @@ size_flags_vertical = 3
 alignment = 1
 
 [node name="Difficulty" parent="Menu/Rows/LeftButtons" instance=ExtResource( 2 )]
-margin_top = 33.0
+margin_top = 45.0
 margin_right = 126.0
-margin_bottom = 53.0
-
-[node name="Back" parent="Menu/Rows/LeftButtons" instance=ExtResource( 3 )]
-margin_top = 57.0
-margin_right = 126.0
-margin_bottom = 77.0
+margin_bottom = 65.0
 
 [node name="RightButtons" type="VBoxContainer" parent="Menu/Rows"]
 margin_left = 130.0
@@ -68,3 +67,13 @@ margin_bottom = 110.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 alignment = 1
+
+[node name="Sound" parent="Menu/Rows/RightButtons" instance=ExtResource( 5 )]
+margin_top = 33.0
+margin_right = 126.0
+margin_bottom = 53.0
+
+[node name="Back" parent="Menu/Rows/RightButtons" instance=ExtResource( 3 )]
+margin_top = 57.0
+margin_right = 126.0
+margin_bottom = 77.0

@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://UI/chary___.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://UI/Buttons/Settings.tscn" type="PackedScene" id=2]
 [ext_resource path="res://UI/Buttons/Play.tscn" type="PackedScene" id=3]
 [ext_resource path="res://UI/TitleScreen/TitleScreen.gd" type="Script" id=4]
 [ext_resource path="res://UI/TitleScreen/Fade.tscn" type="PackedScene" id=5]
+[ext_resource path="res://UI/TitleScreen/Menu.tscn" type="PackedScene" id=6]
 
 [sub_resource type="DynamicFont" id=1]
 size = 30
@@ -26,14 +27,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Menu" type="VBoxContainer" parent="."]
-margin_left = 32.0
-margin_top = 18.0
-margin_right = 288.0
-margin_bottom = 162.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="Menu" parent="." instance=ExtResource( 6 )]
 
 [node name="Title" type="Label" parent="Menu"]
 margin_right = 256.0
