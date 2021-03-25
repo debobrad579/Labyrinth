@@ -57,6 +57,7 @@ one_shot = true
 
 [node name="WallChecker" type="RayCast2D" parent="."]
 visible = false
+position = Vector2( 0, 8 )
 enabled = true
 exclude_parent = false
 cast_to = Vector2( 5, 0 )
