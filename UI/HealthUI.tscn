@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://UI/HealthUI.gd" type="Script" id=1]
+[ext_resource path="res://UI/chary___.ttf" type="DynamicFontData" id=2]
+
+[sub_resource type="DynamicFont" id=1]
+font_data = ExtResource( 2 )
+
+[node name="HealthUI" type="Control"]
+margin_right = 60.0
+margin_bottom = 28.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="."]
+margin_left = 8.48528
+margin_top = 6.01041
+margin_right = 48.4853
+margin_bottom = 23.0104
+custom_fonts/font = SubResource( 1 )
+text = "1"
+__meta__ = {
+"_edit_use_anchors_": false
+}

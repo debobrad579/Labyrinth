@@ -8,7 +8,7 @@
 [ext_resource path="res://Enemies/GroundEnemy.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Enemies/JumpingEnemy.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Enemies/FlyingEnemy2.tscn" type="PackedScene" id=8]
-[ext_resource path="res://Player/Player2.tscn" type="PackedScene" id=9]
+[ext_resource path="res://UI/HealthUI.tscn" type="PackedScene" id=9]
 
 [node name="Main" type="Node2D"]
 
@@ -17,9 +17,6 @@ tile_data = PoolIntArray( -655352, 0, 0, -655351, 0, 1, -655350, 0, 1, -655349, 
 
 [node name="Player1" parent="." instance=ExtResource( 3 )]
 position = Vector2( 170.5, 22.5 )
-
-[node name="Player2" parent="." instance=ExtResource( 9 )]
-position = Vector2( 152.143, 21.0218 )
 
 [node name="Camera" parent="." instance=ExtResource( 2 )]
 pixel_stretch_point = 100
@@ -53,3 +50,7 @@ collision_layer = 1
 position = Vector2( 376, 48 )
 collision_layer = 1
 AIR_BORNE = false
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="HealthUI" parent="CanvasLayer" instance=ExtResource( 9 )]
