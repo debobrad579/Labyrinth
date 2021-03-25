@@ -60,7 +60,8 @@ export var DOUBLE_JUMP_TOTAL = 1
 onready var coyoteTimer = $CoyoteTimer
 onready var moveTimer = $WallJumpTimer
 onready var attackTimer = $AttackTimer
-onready var wallChecker = $WallChecker
+onready var wallCheckerBottom = $WallCheckerBottom
+onready var wallCheckerTop = $WallCheckerTop
 onready var LfloorDetector = $LeftFloorDetector
 onready var RfloorDetector = $RightFloorDetector
 onready var jumpTimer = $JumpTimer
@@ -107,6 +108,8 @@ func wall_slide():
 # Main physics and process function
 func _physics_process(delta):
 	
+	var x_input = Input.get_action_strength(RIGHT) - Input.get_action_strength(LEFT)
+	
 	if Input.is_action_just_pressed(ATTACK):
 		attackPivot.rotation_degrees = 180 * direction_facing
 		attack_hitbox.disabled = false
@@ -123,9 +126,6 @@ func _physics_process(delta):
 	# If they jump slightly before ground contact, they will jump on contact.
 	if floor_detected() == false and Input.is_action_just_pressed(JUMP):
 		jumpTimer.start()
-	
-	# Set the horizontal input
-	var x_input = Input.get_action_strength(RIGHT) - Input.get_action_strength(LEFT)
 	
 	# If there is horizontal input
 	# Changed so that player cannot move "up walls" aka really steep slopes
@@ -230,8 +230,9 @@ func _physics_process(delta):
 			var wall_side
 			
 			# Use RayCast to check if wall is on right. Otherwise left
-			if wallChecker.is_colliding():
+			if wallCheckerBottom.is_colliding() or wallCheckerTop.is_colliding():
 				wall_side = 1
+				print(rand_range(1, 3))
 			else:
 				wall_side = -1
 			
