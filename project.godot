@@ -125,19 +125,39 @@ attack_p2={
 "events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":2,"pressed":false,"doubleclick":false,"script":null)
  ]
 }
+up_p1={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":87,"unicode":0,"echo":false,"script":null)
+ ]
+}
+up_p2={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777232,"unicode":0,"echo":false,"script":null)
+ ]
+}
+down_p1={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":83,"unicode":0,"echo":false,"script":null)
+ ]
+}
+down_p2={
+"deadzone": 0.49,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777234,"unicode":0,"echo":false,"script":null)
+ ]
+}
 
 [layer_names]
 
 2d_render/layer_1="world"
-2d_physics/layer_1="world"
+2d_physics/layer_1="World"
 2d_render/layer_2="player"
-2d_physics/layer_2="player"
-2d_physics/layer_3="enemy hurtbox"
-2d_physics/layer_4="enemy hitbox"
-2d_physics/layer_5="enemy"
-2d_physics/layer_6="weapon hitbox"
-2d_physics/layer_7="player hurtbox"
-2d_physics/layer_8="player hitbox"
+2d_physics/layer_2="Player"
+2d_physics/layer_3="Enemy Hurtbox"
+2d_physics/layer_4="Enemy Hitbox"
+2d_physics/layer_5="Enemy"
+2d_physics/layer_6="Weapon Hitbox"
+2d_physics/layer_7="Player Hurtbox"
+2d_physics/layer_8="Ladder"
 
 [rendering]
 

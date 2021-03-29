@@ -8,6 +8,8 @@ export var player_id = 0 #0 is player 1... 1 is player 2
 # Set up input map variables
 var LEFT
 var RIGHT
+var UP
+var DOWN
 var JUMP
 var DASH
 var ATTACK
@@ -26,6 +28,8 @@ func change_player_id(id):
 		JUMP = "jump_p1"
 		DASH = "dash_p1"
 		ATTACK = "attack_p1"
+		UP = "up_p1"
+		DOWN = "down_p1"
 	
 	elif player_id == 1:
 		
@@ -34,6 +38,8 @@ func change_player_id(id):
 		JUMP = "jump_p2"
 		DASH = "dash_p2"
 		ATTACK = "attack_p2"
+		UP = "up_p2"
+		DOWN = "down_p2"
 	# We will change the button maping for the final game.
 		
 	else:
@@ -50,6 +56,9 @@ export var ACCELERATION = 500
 export var MAX_SPEED = 90
 export var GRAVITY = 300
 export var JUMP_FORCE = 128
+export var CLIMB_SPEED = 60
+export var CLIMB_DOWN_SPEED = 40
+export var CLIMB_DECCELERATION = 0.1
 export var FRICTION = 675
 export var AIR_RESISTANCE = 150
 export var WALL_SLIDE_ACCELERATION = 2
@@ -60,11 +69,14 @@ export var DOUBLE_JUMP_TOTAL = 1
 onready var coyoteTimer = $CoyoteTimer
 onready var moveTimer = $WallJumpTimer
 onready var attackTimer = $AttackTimer
+onready var dashTimer = $DashTimer
+onready var jumpTimer = $JumpTimer
 onready var wallCheckerBottom = $WallCheckerBottom
 onready var wallCheckerTop = $WallCheckerTop
 onready var LfloorDetector = $LeftFloorDetector
 onready var RfloorDetector = $RightFloorDetector
-onready var jumpTimer = $JumpTimer
+onready var LladderDetector = $LeftLadderDetector
+onready var RladderDetector = $RightLadderDetector
 onready var attackPivot = $BasicAttackPivot
 onready var attack_hitbox = $BasicAttackPivot/BasicAttack/CollisionShape2D
 onready var attack_hitbox2 = $BasicAttackPivot/BasicAttack
@@ -79,8 +91,10 @@ var can_move = true
 var wall_jump = false
 var double_jump = DOUBLE_JUMP_TOTAL
 var wall_double_jump = true
+var jump = false
 var can_resist = false
 var direction_facing = 0
+var dash = false
 
 signal player_died
 
@@ -89,6 +103,11 @@ func _ready():
 	change_player_id(player_id)
 	add_to_group("Players", true)
 	attack_hitbox2.knockback_2 = direction_facing
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+	
+func ladder_detected():
+	if LladderDetector.is_colliding() or RladderDetector.is_colliding():
+		return true
 
 func floor_detected():
 	if is_on_floor() or LfloorDetector.is_colliding() or RfloorDetector.is_colliding():
@@ -110,6 +129,17 @@ func _physics_process(delta):
 	
 	var x_input = Input.get_action_strength(RIGHT) - Input.get_action_strength(LEFT)
 	
+	if Input.is_action_just_pressed(DASH) and dash == false:
+		pass
+		
+	if Input.is_action_pressed(UP) and ladder_detected():
+		motion.y = -CLIMB_SPEED
+	elif ladder_detected() and jump == false:
+		if Input.is_action_pressed(DOWN):
+			motion.y = lerp(motion.y, CLIMB_DOWN_SPEED * 3, CLIMB_DECCELERATION)
+		else:
+			motion.y = lerp(motion.y, CLIMB_DOWN_SPEED, CLIMB_DECCELERATION)
+	
 	if Input.is_action_just_pressed(ATTACK):
 		attackPivot.rotation_degrees = 180 * direction_facing
 		attack_hitbox.disabled = false
@@ -122,6 +152,9 @@ func _physics_process(delta):
 	if Input.is_action_pressed(RIGHT) and not Input.is_action_pressed(LEFT):
 		direction_facing = 0
 		attack_hitbox2.knockback_2 = 0
+		
+	if Input.is_action_just_released(JUMP) or on_floor == true or motion.y > 0:
+		jump = false
 	
 	# If they jump slightly before ground contact, they will jump on contact.
 	if floor_detected() == false and Input.is_action_just_pressed(JUMP):
@@ -134,14 +167,6 @@ func _physics_process(delta):
 		# Accelerate horizontally, clamp to max speed
 		motion.x += x_input * ACCELERATION * delta
 		motion.x = clamp(motion.x, -MAX_SPEED, MAX_SPEED)
-	
-	# NOTE: -------------------------------------------------------------------
-	# I used the is_on_floor() function instead of the on_floor bool because it
-	# works better with the is_on_wall() variable... this way the player can't
-	# jump up high slopes. I also check if the coyote timer is out of time, so
-	# this implements the same functionality, just more efficiently.
-	# Finally, I removed the "jump" boolean and just set on_floor = false, which
-	# is now used to detect coyote time. --------------------------------------
 	
 	# If is on floor, then set on floor to true.
 	if floor_detected() == true: 
@@ -175,6 +200,7 @@ func _physics_process(delta):
 			
 			# Set y velocity/motion to jump force (up) and on_floor to false.
 			motion.y = -JUMP_FORCE
+			jump = true
 			on_floor = false
 
 	# If play is not on floor,
@@ -196,9 +222,12 @@ func _physics_process(delta):
 		
 		# If no horizontal input,
 		if x_input == 0:
-			
-			# Air friction
-			motion.x = move_toward(motion.x, 0, AIR_RESISTANCE * delta)
+				#Normal friction if by ladder.
+			if ladder_detected():
+				motion.x = move_toward(motion.x, 0, FRICTION * delta)
+			else:
+				# Air friction
+				motion.x = move_toward(motion.x, 0, AIR_RESISTANCE * delta)
 			
 		# If there are still double jumps left and they press jump
 		if double_jump > 0 and Input.is_action_just_pressed(JUMP) and wall_slide() == false:
@@ -207,6 +236,7 @@ func _physics_process(delta):
 			
 			# Jump
 			motion.y = -JUMP_FORCE
+			jump = true
 			# Simplified max speed affector
 			motion.x = (MAX_SPEED * x_input) / 2
 			motion.x = clamp(motion.x, -MAX_SPEED, MAX_SPEED)
@@ -232,7 +262,6 @@ func _physics_process(delta):
 			# Use RayCast to check if wall is on right. Otherwise left
 			if wallCheckerBottom.is_colliding() or wallCheckerTop.is_colliding():
 				wall_side = 1
-				print(rand_range(1, 3))
 			else:
 				wall_side = -1
 			
@@ -257,7 +286,8 @@ func _physics_process(delta):
 			motion.y = min(motion.y + WALL_SLIDE_ACCELERATION, MAX_WALL_SLIDE_SPEED)
 	
 	var gravity_vector = Vector2(0, GRAVITY)
-	motion += gravity_vector * delta
+	if not ladder_detected() or Input.is_action_pressed(JUMP):
+		motion += gravity_vector * delta
 	motion = move_and_slide(motion, -gravity_vector, true, 4, PI/4, false)
 
 func _on_WallDetector_body_entered(_body):
@@ -265,7 +295,6 @@ func _on_WallDetector_body_entered(_body):
 
 func _on_WallDetector_body_exited(_body):
 	on_wall = false
-
 
 func _on_WallJumpTimer_timeout():
 	can_move = true
@@ -282,3 +311,7 @@ func _on_Stats_no_health():
 func _on_Hurtbox_area_entered(area):
 	stats.health -= area.damage
 	hurtbox.start_invincability(1)
+
+func _on_DashTimer_timeout():
+	dash = false
+	MAX_SPEED /= 2
