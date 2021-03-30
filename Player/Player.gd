@@ -91,10 +91,11 @@ var can_move = true
 var wall_jump = false
 var double_jump = DOUBLE_JUMP_TOTAL
 var wall_double_jump = true
-var jump = false
+var jumping = false
 var can_resist = false
 var direction_facing = 0
 var dash = false
+var climbing = false
 
 signal player_died
 
@@ -134,11 +135,15 @@ func _physics_process(delta):
 		
 	if Input.is_action_pressed(UP) and ladder_detected():
 		motion.y = -CLIMB_SPEED
-	elif ladder_detected() and jump == false:
+		climbing = true
+	elif ladder_detected() and jumping == false:
+		climbing = false
 		if Input.is_action_pressed(DOWN):
 			motion.y = lerp(motion.y, CLIMB_DOWN_SPEED * 3, CLIMB_DECCELERATION)
 		else:
 			motion.y = lerp(motion.y, CLIMB_DOWN_SPEED, CLIMB_DECCELERATION)
+	else:
+		climbing = false
 	
 	if Input.is_action_just_pressed(ATTACK):
 		attackPivot.rotation_degrees = 180 * direction_facing
@@ -154,7 +159,7 @@ func _physics_process(delta):
 		attack_hitbox2.knockback_2 = 0
 		
 	if Input.is_action_just_released(JUMP) or on_floor == true or motion.y > 0:
-		jump = false
+		jumping = false
 	
 	# If they jump slightly before ground contact, they will jump on contact.
 	if floor_detected() == false and Input.is_action_just_pressed(JUMP):
@@ -200,7 +205,7 @@ func _physics_process(delta):
 			
 			# Set y velocity/motion to jump force (up) and on_floor to false.
 			motion.y = -JUMP_FORCE
-			jump = true
+			jumping = true
 			on_floor = false
 
 	# If play is not on floor,
@@ -233,20 +238,20 @@ func _physics_process(delta):
 		if double_jump > 0 and Input.is_action_just_pressed(JUMP) and wall_slide() == false:
 			
 			ACCELERATION = 500
-			
-			# Jump
-			motion.y = -JUMP_FORCE
-			jump = true
-			# Simplified max speed affector
-			motion.x = (MAX_SPEED * x_input) / 2
-			motion.x = clamp(motion.x, -MAX_SPEED, MAX_SPEED)
-			
-			# After jump is complete, player can move again
-			can_move = true
-			
-			# reduce double jumps by 1
-			double_jump -= 1
-			if double_jump < 0: double_jump = 0
+			if climbing == false:
+				# Jump
+				motion.y = -JUMP_FORCE
+				jumping = true
+				# Simplified max speed affector
+				motion.x = (MAX_SPEED * x_input) / 2
+				motion.x = clamp(motion.x, -MAX_SPEED, MAX_SPEED)
+				
+				# After jump is complete, player can move again
+				can_move = true
+				
+				# reduce double jumps by 1
+				double_jump -= 1
+				if double_jump < 0: double_jump = 0
 	
 	# If on wall and not on floor (air wall)
 	if on_wall and floor_detected() == false:
