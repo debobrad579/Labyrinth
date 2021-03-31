@@ -85,17 +85,14 @@ position = Vector2( 112, -24 )
 [node name="CanvasLayer" type="CanvasLayer" parent="Player"]
 
 [node name="HealthUI" parent="Player/CanvasLayer" instance=ExtResource( 9 )]
-margin_left = 8.0
-margin_top = 8.0
-margin_right = 68.0
-margin_bottom = 36.0
+margin_right = 60.0
 
 [node name="MagicUI" parent="Player/CanvasLayer" instance=ExtResource( 11 )]
-margin_left = 8.0
-margin_top = 24.0
-margin_right = -240.0
-margin_bottom = -140.0
 
 [editable path="Objects/Ladder"]
 
 [editable path="Objects/Ladder2"]
+
+[editable path="Player/CanvasLayer/HealthUI"]
+
+[editable path="Player/CanvasLayer/MagicUI"]
