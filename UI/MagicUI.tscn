@@ -1,0 +1,34 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Graphics/MagicEmpty.png" type="Texture" id=1]
+[ext_resource path="res://Graphics/MagicFullVer2.png" type="Texture" id=2]
+[ext_resource path="res://UI/MagicUI.gd" type="Script" id=3]
+
+[node name="MagicUI" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -248.0
+margin_bottom = -164.0
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MagicUIEmpty" type="TextureRect" parent="."]
+margin_right = 66.0
+margin_bottom = 16.0
+texture = ExtResource( 1 )
+expand = true
+stretch_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MagicUIFull" type="TextureRect" parent="."]
+margin_left = 1.0
+margin_right = 65.0
+margin_bottom = 16.0
+rect_rotation = 360.0
+texture = ExtResource( 2 )
+expand = true
+stretch_mode = 2

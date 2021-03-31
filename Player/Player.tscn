@@ -118,7 +118,8 @@ shape = SubResource( 3 )
 disabled = true
 
 [node name="Stats" parent="." instance=ExtResource( 3 )]
-maxHealth = 1000
+maxHealth = 6
+maxMana = 16
 
 [node name="Hurtbox" parent="." instance=ExtResource( 4 )]
 collision_layer = 64

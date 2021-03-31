@@ -48,7 +48,9 @@ func change_player_id(id):
 		RIGHT = ""
 		JUMP = ""
 		DASH = ""
-
+		ATTACK = ""
+		UP = ""
+		DOWN = ""
 
 
 # Export Constants
@@ -64,6 +66,7 @@ export var AIR_RESISTANCE = 150
 export var WALL_SLIDE_ACCELERATION = 2
 export var MAX_WALL_SLIDE_SPEED = 30
 export var DOUBLE_JUMP_TOTAL = 1
+export var MANA_REGENERATION_SPEED = 0.005
 
 # Preload Nodes
 onready var coyoteTimer = $CoyoteTimer
@@ -130,12 +133,17 @@ func _physics_process(delta):
 	
 	var x_input = Input.get_action_strength(RIGHT) - Input.get_action_strength(LEFT)
 	
+	stats.mana = move_toward(stats.mana, stats.maxMana, MANA_REGENERATION_SPEED)
+	
 	if Input.is_action_just_pressed(DASH) and dash == false:
-		pass
+		print(stats.mana)
+		if stats.mana >= 2:
+			stats.mana -= 2
 		
 	if Input.is_action_pressed(UP) and ladder_detected():
 		motion.y = -CLIMB_SPEED
 		climbing = true
+		double_jump = DOUBLE_JUMP_TOTAL
 	elif ladder_detected() and jumping == false:
 		climbing = false
 		if Input.is_action_pressed(DOWN):
@@ -272,6 +280,7 @@ func _physics_process(delta):
 			
 			# Add jump force
 			motion.y = -JUMP_FORCE
+			jumping = true
 			# Add velocity based on what wall you are on
 			motion.x = MAX_SPEED * -wall_side
 			# Turn of movement
