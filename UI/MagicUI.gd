@@ -1,6 +1,6 @@
 extends Control
 
-export var ANIMATION_SPEED = 0.3
+export var ANIMATION_SPEED = 20
 
 var mp = 1 setget set_mp
 var max_mp = 1 setget set_max_mp
@@ -32,4 +32,4 @@ func _ready():
 	start = false
 
 func _physics_process(delta):
-	magicUIFull.rect_size.x = move_toward(magicUIFull.rect_size.x, size, ANIMATION_SPEED)
+	magicUIFull.rect_size.x = move_toward(magicUIFull.rect_size.x, size, ANIMATION_SPEED * delta)

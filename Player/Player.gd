@@ -66,7 +66,7 @@ export var AIR_RESISTANCE = 150
 export var WALL_SLIDE_ACCELERATION = 2
 export var MAX_WALL_SLIDE_SPEED = 30
 export var DOUBLE_JUMP_TOTAL = 1
-export var MANA_REGENERATION_SPEED = 0.005
+export var MANA_REGENERATION_SPEED = 0.5
 
 # Preload Nodes
 onready var coyoteTimer = $CoyoteTimer
@@ -133,7 +133,7 @@ func _physics_process(delta):
 	
 	var x_input = Input.get_action_strength(RIGHT) - Input.get_action_strength(LEFT)
 	
-	stats.mana = move_toward(stats.mana, stats.maxMana, MANA_REGENERATION_SPEED)
+	stats.mana = move_toward(stats.mana, stats.maxMana, MANA_REGENERATION_SPEED * delta)
 	
 	if Input.is_action_just_pressed(DASH) and dash == false:
 		if stats.mana >= 2:
