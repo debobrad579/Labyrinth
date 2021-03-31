@@ -136,7 +136,6 @@ func _physics_process(delta):
 	stats.mana = move_toward(stats.mana, stats.maxMana, MANA_REGENERATION_SPEED)
 	
 	if Input.is_action_just_pressed(DASH) and dash == false:
-		print(stats.mana)
 		if stats.mana >= 2:
 			stats.mana -= 2
 		
