@@ -1,6 +1,6 @@
 extends Control
 
-export var ANIMATION_SPEED = 20
+export var ANIMATION_SPEED = 30
 export var P1_MAGIC_POSITION_X = 8
 export var P1_MAGIC_POSITION_Y = 24
 export var P2_MAGIC_POSITION_X = 8
@@ -52,6 +52,7 @@ func _ready():
 		magicUIFullRed.visible = false
 		start = false
 	else:
+		
 		self.mp = player2.stats.mana
 		player2.stats.connect("mana_changed", self, "set_mp")
 		self.red_mp = player.stats.mana

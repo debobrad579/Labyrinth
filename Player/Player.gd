@@ -133,7 +133,10 @@ func _physics_process(delta):
 	
 	var x_input = Input.get_action_strength(RIGHT) - Input.get_action_strength(LEFT)
 	
-	stats.mana = move_toward(stats.mana, stats.maxMana, MANA_REGENERATION_SPEED * delta)
+	if stats.mana < stats.maxMana:
+		stats.mana = move_toward(stats.mana, stats.maxMana, MANA_REGENERATION_SPEED * delta)
+	else:
+		stats.mana = stats.maxMana
 	
 	if Input.is_action_just_pressed(DASH) and dash == false:
 		if stats.mana >= 2:
