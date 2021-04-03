@@ -58,7 +58,7 @@ func change_player_id(id):
 
 # Export Constants
 export var ACCELERATION = 500
-export var MAX_SPEED = 90
+export var MAX_SPEED = 100
 export var GRAVITY = 300
 export var JUMP_FORCE = 128
 export var CLIMB_SPEED = 60
@@ -143,6 +143,9 @@ func _physics_process(delta):
 	
 	var x_input = Input.get_action_strength(RIGHT) - Input.get_action_strength(LEFT)
 	
+	if Input.is_key_pressed(KEY_ESCAPE):
+		get_tree()
+	
 	if Input.is_action_pressed(LEFT) and not Input.is_action_pressed(RIGHT):
 		direction_facing.x = -1
 		attack_hitbox2.knockback_2 = 1
@@ -223,7 +226,7 @@ func _physics_process(delta):
 		
 		# Accelerate horizontally, clamp to max speed
 		motion.x += x_input * ACCELERATION * delta
-		motion.x = clamp(motion.x, -MAX_SPEED, MAX_SPEED)
+		motion.x = clamp(motion.x, -MAX_SPEED * abs(x_input), MAX_SPEED * abs(x_input))
 	
 	# If is on floor, then set on floor to true.
 	if floor_detected() == true: 
@@ -276,7 +279,6 @@ func _physics_process(delta):
 		# Exceeds half value, though).
 		if Input.is_action_just_released(JUMP) and motion.y < -JUMP_FORCE/2 and wall_jump == false:
 			motion.y = -JUMP_FORCE/2
-			print("yes")
 		# If no horizontal input,
 		if x_input == 0:
 				#Normal friction if by ladder.
