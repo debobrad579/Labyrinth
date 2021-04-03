@@ -144,7 +144,7 @@ func _physics_process(delta):
 	var x_input = Input.get_action_strength(RIGHT) - Input.get_action_strength(LEFT)
 	
 	if Input.is_key_pressed(KEY_ESCAPE):
-		get_tree()
+		get_tree().quit()
 	
 	if Input.is_action_pressed(LEFT) and not Input.is_action_pressed(RIGHT):
 		direction_facing.x = -1
