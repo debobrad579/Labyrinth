@@ -59,11 +59,13 @@ func change_player_id(id):
 # Export Constants
 export var ACCELERATION = 500
 export var MAX_SPEED = 100
+export var WALL_JUMP_SPEED = 90
 export var GRAVITY = 300
 export var JUMP_FORCE = 128
+export var CLIMB_MAX_SPEED = 50
 export var CLIMB_SPEED = 60
 export var CLIMB_DOWN_SPEED = 40
-export var CLIMB_DECCELERATION = 0.1
+export var CLIMB_ACCELERATION = 0.1
 export var FRICTION = 675
 export var AIR_RESISTANCE = 150
 export var WALL_SLIDE_ACCELERATION = 2
@@ -108,6 +110,7 @@ var can_resist = false
 var direction_facing = Vector2(1, 0)
 var dash = false
 var climbing = false
+var climbing_down = false
 
 signal player_died
 
@@ -179,16 +182,19 @@ func _physics_process(delta):
 		
 	if Input.is_action_pressed(UP) and ladder_detected():
 		motion.y = -CLIMB_SPEED
+		climbing_down = false
 		climbing = true
 		double_jump = DOUBLE_JUMP_TOTAL
 	elif ladder_detected() and jumping == false:
 		climbing = false
 		if Input.is_action_pressed(DOWN):
-			motion.y = lerp(motion.y, CLIMB_DOWN_SPEED * 3, CLIMB_DECCELERATION)
+			climbing_down = true
+			motion.y = lerp(motion.y, CLIMB_DOWN_SPEED * 3, CLIMB_ACCELERATION)
 		else:
-			motion.y = lerp(motion.y, CLIMB_DOWN_SPEED, CLIMB_DECCELERATION)
+			motion.y = lerp(motion.y, CLIMB_DOWN_SPEED, CLIMB_ACCELERATION)
 	else:
 		climbing = false
+		climbing_down = false
 	
 	if Input.is_action_just_pressed(ATTACK):
 		if direction_facing.x == 1:
@@ -226,7 +232,10 @@ func _physics_process(delta):
 		
 		# Accelerate horizontally, clamp to max speed
 		motion.x += x_input * ACCELERATION * delta
-		motion.x = clamp(motion.x, -MAX_SPEED * abs(x_input), MAX_SPEED * abs(x_input))
+		if climbing == false:
+			motion.x = clamp(motion.x, -MAX_SPEED * abs(x_input), MAX_SPEED * abs(x_input))
+		else:
+			motion.x = clamp(motion.x, -CLIMB_MAX_SPEED * abs(x_input), CLIMB_MAX_SPEED * abs(x_input))
 	
 	# If is on floor, then set on floor to true.
 	if floor_detected() == true: 
@@ -328,7 +337,7 @@ func _physics_process(delta):
 			motion.y = -JUMP_FORCE
 			jumping = true
 			# Add velocity based on what wall you are on
-			motion.x = MAX_SPEED * -wall_side
+			motion.x = WALL_JUMP_SPEED * -wall_side
 			# Turn of movement
 			can_move = false
 			# Indicate a wall jump has occured
