@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://TileMaps/TileMap.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Player/Camera.tscn" type="PackedScene" id=2]
@@ -8,9 +8,8 @@
 [ext_resource path="res://Enemies/GroundEnemy.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Enemies/JumpingEnemy.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Enemies/FlyingEnemy2.tscn" type="PackedScene" id=8]
-[ext_resource path="res://UI/HealthUI.tscn" type="PackedScene" id=9]
+[ext_resource path="res://UI/UI.tscn" type="PackedScene" id=9]
 [ext_resource path="res://Objects/Ladder.tscn" type="PackedScene" id=10]
-[ext_resource path="res://UI/MagicUI.tscn" type="PackedScene" id=11]
 [ext_resource path="res://TileMaps/RockyTileMap.tscn" type="PackedScene" id=12]
 [ext_resource path="res://Items/LargeManaPotion.tscn" type="PackedScene" id=13]
 [ext_resource path="res://Items/SmallManaPotion.tscn" type="PackedScene" id=14]
@@ -95,12 +94,7 @@ AIR_BORNE = false
 [node name="Player1" parent="Player" instance=ExtResource( 3 )]
 position = Vector2( 112, -24 )
 
-[node name="CanvasLayer" type="CanvasLayer" parent="Player"]
-
-[node name="HealthUI" parent="Player/CanvasLayer" instance=ExtResource( 9 )]
-margin_right = 60.0
-
-[node name="MagicUI" parent="Player/CanvasLayer" instance=ExtResource( 11 )]
+[node name="UI" parent="Player" instance=ExtResource( 9 )]
 
 [node name="Items" type="Node2D" parent="."]
 
@@ -125,7 +119,3 @@ position = Vector2( 400, -56 )
 [editable path="Objects/Ladder"]
 
 [editable path="Objects/Ladder2"]
-
-[editable path="Player/CanvasLayer/HealthUI"]
-
-[editable path="Player/CanvasLayer/MagicUI"]

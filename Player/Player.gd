@@ -1,11 +1,8 @@
 extends KinematicBody2D
 
-# Player id. Note that it is exported, so this value can be 
-# Adjusted for Player1 scene and Player2 scene to 0 and 1 respectively.
-# See _ready() function below
-export var player_id = 0 #0 is player 1... 1 is player 2
+export var player_id = 0 
 
-# Set up input map variables
+# Input map variables
 var LEFT
 var RIGHT
 var UP
@@ -15,15 +12,10 @@ var DASH
 var ATTACK
 var SECONDARY_ATTACK
 
-# When the players id is changed, adopt appropriate input map.
-# Characteers with an id that is no p1 or p2 would be assigned a blank
-# Input map so they do not move.
 func change_player_id(id):
-	
 	player_id = id
 	
 	if player_id == 0:
-		
 		LEFT = "walk_left_p1"
 		RIGHT = "walk_right_p1"
 		UP = "up_p1"
@@ -32,9 +24,7 @@ func change_player_id(id):
 		DASH = "dash_p1"
 		ATTACK = "attack_p1"
 		SECONDARY_ATTACK = "secondary_attack_p1"
-	
 	elif player_id == 1:
-		
 		LEFT = "walk_left_p2"
 		RIGHT = "walk_right_p2"
 		UP = "up_p2"
@@ -43,10 +33,7 @@ func change_player_id(id):
 		DASH = "dash_p2"
 		ATTACK = "attack_p2"
 		SECONDARY_ATTACK = "secondary_attack_p2"
-	# We will change the button maping for the final game.
-		
 	else:
-		
 		LEFT = ""
 		RIGHT = ""
 		UP = ""
@@ -114,28 +101,21 @@ var climbing_down = false
 var wall_double_jump = true
 var wall_jump_axis = 1
 
-signal player_died
-
-# When ready, change the id and input maps to the cooresponding ones.
 func _ready():
 	change_player_id(player_id)
 	add_to_group("Players", true)
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	projectile_summoner_offset = projectileSummoner.position.x
 
-# Main physics and process function
 func _physics_process(delta):
 	just_jumped = false
 	
 	set_direction_facing()
 	set_mana_regeneration(delta)
 	
-# A match statment is gd script's, switch statement alternative.
 	match state:
-		# case
 		MOVE:
 			var input_vector = get_input_vector()
-			
 			apply_horizontal_force(input_vector, delta)
 			apply_friction(input_vector)
 			update_snap_vector()
@@ -144,10 +124,9 @@ func _physics_process(delta):
 			apply_gravity(delta)
 			move()
 			wall_slide_check()
-		# case
+			
 		WALL_SLIDE:
 			var wall_axis = get_wall_axis()
-			
 			wall_jump_check(wall_axis)
 			wall_slide_descending_speed_check(delta)
 			ladder_check()
@@ -176,7 +155,8 @@ func set_attack_pivot_rotation():
 		
 func set_mana_regeneration(delta):
 	if stats.mana < stats.maxMana:
-		stats.mana = move_toward(stats.mana, stats.maxMana, MANA_REGENERATION_SPEED * delta)
+		(stats.mana = move_toward(stats.mana, stats.maxMana, 
+		MANA_REGENERATION_SPEED * delta))
 	else:
 		stats.mana = stats.maxMana
 		
@@ -228,17 +208,20 @@ func apply_horizontal_force(input_vector, delta):
 		motion.x += ACCELERATION * input_vector.x * delta
 		motion.x = clamp(motion.x, -MAX_SPEED, MAX_SPEED)
 		
+	# After a wall jump
 	if just_wall_jumped and input_vector.x == wall_jump_axis:
 		motion.x = lerp(motion.x, MAX_SPEED * input_vector.x, WALL_JUMP_RESISTANCE)
 	elif just_wall_jumped and input_vector.x != wall_jump_axis:
 		motion.x += ACCELERATION * input_vector.x * delta
 		motion.x = clamp(motion.x, -MAX_SPEED, MAX_SPEED)
 	
+	# While climbing
 	if climbing:
 		motion.x = clamp(motion.x, -CLIMB_MAX_SPEED, CLIMB_MAX_SPEED)
 		
 func apply_friction(input_vector):
 	if input_vector.x != 0: return
+	
 	if is_on_floor():
 		motion.x = lerp(motion.x, 0, FRICTION)
 	else:
@@ -261,25 +244,31 @@ func jump_check(input_vector):
 		if Input.is_action_just_pressed(JUMP):
 			jump(JUMP_FORCE)
 			just_jumped = true
+			
 		if jumpTimer.is_stopped(): return
-		if Input.is_action_pressed(JUMP): 
-			jump(JUMP_FORCE)
+		
+		if Input.is_action_pressed(JUMP): jump(JUMP_FORCE)
 		else: jump(JUMP_FORCE/2)
+		
 		just_jumped = true
+		return
+		
+	if not Input.is_action_just_pressed(JUMP):
+		jump_released_check()
+		return
+		
+	if double_jump:
+		just_wall_jumped = false
+		motion.x = input_vector.x * MAX_SPEED
+		
+	if not coyoteTimer.is_stopped():
+		jump(JUMP_FORCE)
+		
 	else:
-		if not Input.is_action_just_pressed(JUMP):
-			jump_released_check()
-			return
 		if double_jump:
-			just_wall_jumped = false
-			motion.x = input_vector.x * MAX_SPEED
-		if not coyoteTimer.is_stopped():
-			jump(JUMP_FORCE)
-		else:
-			if double_jump:
-				jump(JUMP_FORCE * 0.8)
-				double_jump = false
-		jumpTimer.start()
+			jump(JUMP_FORCE * 0.8)
+			double_jump = false
+	jumpTimer.start()
 		
 func jump(force):
 	jumping = true

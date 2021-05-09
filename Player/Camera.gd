@@ -8,10 +8,6 @@ func _ready():
 	limit_left = topLeft.position.x
 	limit_bottom = bottomRight.position.y
 	limit_right = bottomRight.position.x
-	
-# The standard node doesn't have a position, so the 
-# TopLeft and BottomRight position2d nodes don't follow the camera anymore.
-# For each area you the position2d nodes can be set up to give the camera limits.
 
 # Get the player nodes from the player group (as a list)
 onready var players = get_tree().get_nodes_in_group("Players")
@@ -30,10 +26,17 @@ func _physics_process(delta):
 	
 	players = get_tree().get_nodes_in_group("Players")
 	
+	for player in players:
+		if player.position.y > limit_bottom: 
+			player.stats.health = 0
+	
 	if len(players) == 1:
 
 	# Set position to player
 		position = players[0].position
+		zoom = Vector2(1, 1)
+		
+
 
 	elif len(players) == 2: # if 2 players. If no players, or more than 2, currently camera just does not move.
 
@@ -67,5 +70,5 @@ func _physics_process(delta):
 		
 			scaler = lerp(scaler, min_scale, zoom_lerp_rate)
 	
-	# Zoom, a vecotor, is multiplied by the scaler, or the scale value
+	# Zoom, a vector, is multiplied by the scaler, or the scale value
 		zoom = Vector2(1, 1) * scaler

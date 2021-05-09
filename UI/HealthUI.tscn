@@ -6,10 +6,6 @@
 [ext_resource path="res://Graphics/UI/HeartFullP1.png" type="Texture" id=4]
 [ext_resource path="res://Graphics/UI/HeartEmptyP1.png" type="Texture" id=5]
 
-
-
-
-
 [node name="HealthUI" type="Control"]
 margin_right = 16.0
 margin_bottom = 16.0
@@ -20,12 +16,17 @@ __meta__ = {
 }
 
 [node name="HeartUIEmpty" type="TextureRect" parent="."]
-margin_right = 16.0
-margin_bottom = 16.0
+margin_left = 8.0
+margin_top = 48.0
+margin_right = 24.0
+margin_bottom = 64.0
 texture = ExtResource( 2 )
 stretch_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="HeartUIFull" type="TextureRect" parent="."]
+[node name="HeartUIFull" type="TextureRect" parent="HeartUIEmpty"]
 margin_right = 16.0
 margin_bottom = 16.0
 texture = ExtResource( 3 )
@@ -36,8 +37,10 @@ __meta__ = {
 }
 
 [node name="HeartUIEmptyBlue" type="TextureRect" parent="."]
-margin_right = 16.0
-margin_bottom = 16.0
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 24.0
+margin_bottom = 24.0
 texture = ExtResource( 5 )
 expand = true
 stretch_mode = 2
@@ -45,7 +48,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HeartUIFullBlue" type="TextureRect" parent="."]
+[node name="HeartUIFullBlue" type="TextureRect" parent="HeartUIEmptyBlue"]
 margin_right = 16.0
 margin_bottom = 16.0
 texture = ExtResource( 4 )
