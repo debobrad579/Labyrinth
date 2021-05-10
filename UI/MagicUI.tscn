@@ -1,0 +1,65 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Graphics/UI/MagicEmpty.png" type="Texture" id=1]
+[ext_resource path="res://Graphics/UI/MagicFullVer2.png" type="Texture" id=2]
+[ext_resource path="res://UI/MagicUI.gd" type="Script" id=3]
+[ext_resource path="res://Graphics/UI/MagicFullP2Ver2.png" type="Texture" id=4]
+
+[node name="MagicUI" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -248.0
+margin_bottom = -164.0
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="MagicUIEmpty" type="TextureRect" parent="."]
+margin_left = 8.0
+margin_top = 24.0
+margin_right = 74.0
+margin_bottom = 40.0
+texture = ExtResource( 1 )
+expand = true
+stretch_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MagicUIFull" type="TextureRect" parent="MagicUIEmpty"]
+margin_left = 1.0
+margin_top = 1.90735e-06
+margin_right = 65.0
+margin_bottom = 16.0
+rect_rotation = 360.0
+texture = ExtResource( 2 )
+expand = true
+stretch_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MagicUIEmptyRed" type="TextureRect" parent="."]
+margin_left = 8.0
+margin_top = 64.0
+margin_right = 74.0
+margin_bottom = 80.0
+texture = ExtResource( 1 )
+expand = true
+stretch_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MagicUIFullRed" type="TextureRect" parent="MagicUIEmptyRed"]
+margin_left = 1.0
+margin_right = 65.0
+margin_bottom = 16.0
+texture = ExtResource( 4 )
+expand = true
+stretch_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}

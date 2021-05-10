@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Enemies/FlyingEnemyAI.gd" type="Script" id=1]
 [ext_resource path="res://ReusableNodes/Stats.tscn" type="PackedScene" id=2]
@@ -6,15 +6,22 @@
 [ext_resource path="res://ReusableNodes/Hurtbox.tscn" type="PackedScene" id=4]
 [ext_resource path="res://ReusableNodes/PlayerDetection.tscn" type="PackedScene" id=5]
 [ext_resource path="res://ReusableNodes/WanderController.tscn" type="PackedScene" id=6]
+[ext_resource path="res://ReusableNodes/ObjectDetector.tscn" type="PackedScene" id=7]
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 8.0
 height = 0.0
 
 [sub_resource type="CircleShape2D" id=2]
+radius = 8.0
+
+[sub_resource type="CircleShape2D" id=3]
+radius = 9.15557
+
+[sub_resource type="CircleShape2D" id=4]
 radius = 96.0
 
-[node name="MainEnemy" type="KinematicBody2D"]
+[node name="FlyingEnemy" type="KinematicBody2D"]
 collision_layer = 16
 script = ExtResource( 1 )
 
@@ -24,17 +31,41 @@ shape = SubResource( 1 )
 [node name="Sprite" type="Sprite" parent="."]
 
 [node name="Stats" parent="." instance=ExtResource( 2 )]
+maxHealth = 5
 
 [node name="Hitbox" parent="." instance=ExtResource( 3 )]
+collision_layer = 8
+collision_mask = 64
+
+[node name="CollisionShape2D" parent="Hitbox" index="0"]
+shape = SubResource( 2 )
 
 [node name="Hurtbox" parent="." instance=ExtResource( 4 )]
+collision_mask = 32
+
+[node name="CollisionShape2D" parent="Hurtbox" index="0"]
+shape = SubResource( 3 )
 
 [node name="PlayerDetection" parent="." instance=ExtResource( 5 )]
+visible = false
 
 [node name="CollisionShape2D" parent="PlayerDetection" index="0"]
 modulate = Color( 1, 1, 1, 0.286275 )
-shape = SubResource( 2 )
+shape = SubResource( 4 )
 
 [node name="WanderController" parent="." instance=ExtResource( 6 )]
+
+[node name="ObjectDetector" parent="." instance=ExtResource( 7 )]
+visible = false
+
+[node name="PursuitTimer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+[connection signal="no_health" from="Stats" to="." method="_on_Stats_no_health"]
+[connection signal="area_entered" from="Hurtbox" to="." method="_on_Hurtbox_area_entered"]
+
+[editable path="Hitbox"]
+
+[editable path="Hurtbox"]
 
 [editable path="PlayerDetection"]

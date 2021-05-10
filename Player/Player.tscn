@@ -1,13 +1,25 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Player/Player.gd" type="Script" id=1]
+[ext_resource path="res://Player/BasicAttack.gd" type="Script" id=2]
+[ext_resource path="res://ReusableNodes/Stats.tscn" type="PackedScene" id=3]
+[ext_resource path="res://ReusableNodes/Hurtbox.tscn" type="PackedScene" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 3.92402, 9.71526 )
 
-[sub_resource type="CapsuleShape2D" id=2]
-radius = 4.71834
-height = 4.64114
+[sub_resource type="CapsuleShape2D" id=3]
+radius = 3.93126
+height = 7.22008
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 3.18017, 8.95964 )
+
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 4.04815, 9.64647 )
+
+[sub_resource type="RectangleShape2D" id=6]
+extents = Vector2( 3.86086, 9.74012 )
 
 [node name="Player" type="KinematicBody2D" groups=[
 "Players",
@@ -21,16 +33,8 @@ __meta__ = {
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
 
-[node name="WallDetector" type="Area2D" parent="."]
-collision_layer = 0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="WallDetector"]
-visible = false
-position = Vector2( 0.038311, 1.55319 )
-shape = SubResource( 2 )
-
 [node name="CoyoteTimer" type="Timer" parent="."]
-wait_time = 0.1
+wait_time = 0.15
 one_shot = true
 
 [node name="WallJumpTimer" type="Timer" parent="."]
@@ -41,23 +45,78 @@ one_shot = true
 wait_time = 0.1
 one_shot = true
 
-[node name="WallChecker" type="RayCast2D" parent="."]
-visible = false
-enabled = true
-exclude_parent = false
-cast_to = Vector2( 5, 0 )
+[node name="AttackTimer" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
 
-[node name="RightFloorDetector" type="RayCast2D" parent="."]
-visible = false
-position = Vector2( 2.6, 0 )
-enabled = true
-cast_to = Vector2( 0, 9.75 )
+[node name="DashTimer" type="Timer" parent="."]
+wait_time = 0.3
+one_shot = true
 
-[node name="LeftFloorDetector" type="RayCast2D" parent="."]
+[node name="LeftLadderDetector" type="RayCast2D" parent="."]
 visible = false
-position = Vector2( -2.6, 0 )
+position = Vector2( -3, 8 )
+rotation = -3.14159
 enabled = true
-cast_to = Vector2( 0, 9.75 )
-[connection signal="body_entered" from="WallDetector" to="." method="_on_WallDetector_body_entered"]
-[connection signal="body_exited" from="WallDetector" to="." method="_on_WallDetector_body_exited"]
-[connection signal="timeout" from="WallJumpTimer" to="." method="_on_WallJumpTimer_timeout"]
+cast_to = Vector2( 0, 15 )
+collision_mask = 128
+collide_with_areas = true
+collide_with_bodies = false
+
+[node name="RightLadderDetector" type="RayCast2D" parent="."]
+visible = false
+position = Vector2( 3, 8 )
+rotation = 3.14159
+enabled = true
+cast_to = Vector2( 0, 15 )
+collision_mask = 128
+collide_with_areas = true
+collide_with_bodies = false
+
+[node name="BasicAttackPivot" type="Node2D" parent="."]
+
+[node name="BasicAttack" type="Area2D" parent="BasicAttackPivot"]
+position = Vector2( 9.51073, 0.0834293 )
+collision_layer = 32
+collision_mask = 4
+script = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BasicAttackPivot/BasicAttack"]
+shape = SubResource( 3 )
+disabled = true
+
+[node name="Stats" parent="." instance=ExtResource( 3 )]
+maxHealth = 6
+maxMana = 16
+
+[node name="Hurtbox" parent="." instance=ExtResource( 4 )]
+collision_layer = 64
+
+[node name="CollisionShape2D" parent="Hurtbox" index="0"]
+shape = SubResource( 4 )
+
+[node name="Sprite" type="Sprite" parent="."]
+
+[node name="HealDetector" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 256
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HealDetector"]
+visible = false
+shape = SubResource( 5 )
+
+[node name="RecoverManaDetector" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 512
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RecoverManaDetector"]
+visible = false
+shape = SubResource( 6 )
+
+[node name="ProjectileSummoner" type="Position2D" parent="."]
+position = Vector2( 8, 0 )
+[connection signal="timeout" from="AttackTimer" to="." method="_on_AttackTimer_timeout"]
+[connection signal="no_health" from="Stats" to="." method="_on_Stats_no_health"]
+[connection signal="area_entered" from="Hurtbox" to="." method="_on_Hurtbox_area_entered"]
+
+[editable path="Hurtbox"]
