@@ -9,18 +9,12 @@
 config_version=4
 
 _global_script_classes=[ {
-"base": "KinematicBody2D",
-"class": "DefaultEnemy",
-"language": "GDScript",
-"path": "res://Enemies/EnemiesInheritance/Enemy.gd"
-}, {
 "base": "Node",
 "class": "EntityStats",
 "language": "GDScript",
 "path": "res://ReusableNodes/Stats.gd"
 } ]
 _global_script_class_icons={
-"DefaultEnemy": "",
 "EntityStats": ""
 }
 
@@ -29,6 +23,10 @@ _global_script_class_icons={
 config/name="Labyrinth"
 run/main_scene="res://Main.tscn"
 config/icon="res://Graphics/UI/LabyrinthBetaLogoVer2.png"
+
+[autoload]
+
+Utils="*res://Singletons/Utils.gd"
 
 [display]
 

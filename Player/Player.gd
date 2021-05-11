@@ -80,8 +80,8 @@ onready var jumpTimer = $JumpTimer
 onready var LladderDetector = $LeftLadderDetector
 onready var RladderDetector = $RightLadderDetector
 onready var attackPivot = $BasicAttackPivot
-onready var attack_hitbox = $BasicAttackPivot/BasicAttack/CollisionShape2D
-onready var attack_hitbox2 = $BasicAttackPivot/BasicAttack
+onready var attack_hitbox_collision = $BasicAttackPivot/Hitbox/CollisionShape2D
+onready var attack_hitbox = $BasicAttackPivot/Hitbox
 onready var stats = $Stats
 onready var hurtbox = $Hurtbox
 onready var projectileSummoner = $ProjectileSummoner
@@ -144,7 +144,7 @@ func _physics_process(delta):
 		
 func create_regular_attack():
 	set_attack_pivot_rotation()
-	attack_hitbox.disabled = false
+	attack_hitbox_collision.disabled = false
 	attackTimer.start()
 	
 func set_attack_pivot_rotation():
@@ -163,10 +163,29 @@ func set_mana_regeneration(delta):
 func create_mana_attack():
 	set_projectile_summoner_position()
 	stats.mana -= 2
-	var magic_projectile = MAGIC_PROJECTILE.instance()
-	get_parent().add_child(magic_projectile)
-	magic_projectile.knockback_2 = attack_hitbox2.knockback_2
-	magic_projectile.position = projectileSummoner.global_position
+	
+	var magic_projectile = Utils.instance_scene_on_main(MAGIC_PROJECTILE, 
+	projectileSummoner.global_position)
+	
+	# Change textures depending on the player
+	if player_id == 1:
+		magic_projectile.sprite.texture = magic_projectile.spriteP2.texture
+		magic_projectile.remove_child(magic_projectile.particles)
+		magic_projectile.particlesP2.visible = true
+	else:
+		magic_projectile.remove_child(magic_projectile.particlesP2)
+		magic_projectile.particles.visible = true
+		
+	# Change orientation
+	if direction_facing.y == 0:
+		if direction_facing.x == -1:
+			magic_projectile.rotation_degrees = 180
+	else:
+		magic_projectile.rotation_degrees = 90 * direction_facing.y
+		
+	# Apply motion
+	magic_projectile.motion.x += magic_projectile.SPEED
+	magic_projectile.motion = magic_projectile.motion.rotated(deg2rad(magic_projectile.rotation_degrees))
 	
 func set_projectile_summoner_position():
 	if direction_facing.y == 0:
@@ -180,11 +199,11 @@ func set_projectile_summoner_position():
 func set_direction_facing():
 	if Input.is_action_pressed(LEFT) and not Input.is_action_pressed(RIGHT):
 		direction_facing.x = -1
-		attack_hitbox2.knockback_2 = 1
+		attack_hitbox.knockback_x = -abs(attack_hitbox.knockback_x)
 	
 	if Input.is_action_pressed(RIGHT) and not Input.is_action_pressed(LEFT):
 		direction_facing.x = 1
-		attack_hitbox2.knockback_2 = 0
+		attack_hitbox.knockback_x = abs(attack_hitbox.knockback_x)
 		
 	if Input.is_action_pressed(UP):
 		direction_facing.y = -1
@@ -379,7 +398,7 @@ func wall_detach_check(wall_axis, delta):
 		state = MOVE
 
 func _on_AttackTimer_timeout():
-	attack_hitbox.disabled = true
+	attack_hitbox_collision.disabled = true
 
 func _on_Stats_no_health():
 	remove_from_group("Players")

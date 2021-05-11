@@ -48,6 +48,9 @@ func set_red_mp(value):
 	red_mp = clamp(value, 0, player2.stats.maxMana)
 	if magicUIFullRed != null and red_start == false and player2.stats.mana >= 0:
 		red_size = 64 * get_percent(player2.stats.mana, player2.stats.maxMana)
+	if player2.stats.health == 0:
+		red_size = 0
+		magicUIFullRed.rect_size.x = 0
 	red_start = false
 
 # warning-ignore-all:shadowed_variable
@@ -82,6 +85,15 @@ func set_texture_positions(players):
 func animate(delta):
 	(magicUIFull.rect_size.x = move_toward(magicUIFull.rect_size.x, size,
 	 ANIMATION_SPEED * delta))
+	
 	if players == 2:
 		(magicUIFullRed.rect_size.x = move_toward(magicUIFullRed.rect_size.x, 
 		red_size, ANIMATION_SPEED * delta))
+		
+	if player != null and player.stats.health == 0:
+		size = 0
+		magicUIFull.rect_size.x = 0
+		
+	if player2 != null and player2.stats.health == 0:
+		red_size = 0
+		magicUIFullRed.rect_size.x = 0
