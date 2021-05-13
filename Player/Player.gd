@@ -71,6 +71,9 @@ export var MANA_REGENERATION_SPEED = 0.25
 # Preload Scenes
 const MAGIC_PROJECTILE = preload("res://Player/MagicProjectile.tscn")
 
+# Preload Resources
+var stats = ResourceLoader.PlayerStats
+
 # Preload Nodes
 onready var coyoteTimer = $CoyoteTimer
 onready var wallJumpTimer = $WallJumpTimer
@@ -82,7 +85,6 @@ onready var RladderDetector = $RightLadderDetector
 onready var attackPivot = $BasicAttackPivot
 onready var attack_hitbox_collision = $BasicAttackPivot/Hitbox/CollisionShape2D
 onready var attack_hitbox = $BasicAttackPivot/Hitbox
-onready var stats = $Stats
 onready var hurtbox = $Hurtbox
 onready var projectileSummoner = $ProjectileSummoner
 
@@ -104,6 +106,11 @@ var wall_jump_axis = 1
 func _ready():
 	change_player_id(player_id)
 	add_to_group("Players", true)
+	if player_id == 0:
+		stats.connect("no_health", self, "_on_stats_no_health")
+	else:
+		stats.p2_exists = true
+		stats.connect("no_health_p2", self, "_on_stats_no_health")
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	projectile_summoner_offset = projectileSummoner.position.x
 
@@ -154,15 +161,25 @@ func set_attack_pivot_rotation():
 		attackPivot.rotation_degrees = 180
 		
 func set_mana_regeneration(delta):
-	if stats.mana < stats.maxMana:
-		(stats.mana = move_toward(stats.mana, stats.maxMana, 
-		MANA_REGENERATION_SPEED * delta))
+	if player_id == 0:
+		if stats.mana < stats.max_mana:
+			(stats.mana = move_toward(stats.mana, stats.max_mana, 
+			MANA_REGENERATION_SPEED * delta))
+		else:
+			stats.mana = stats.max_mana
 	else:
-		stats.mana = stats.maxMana
+		if stats.mana_p2 < stats.max_mana_p2:
+			(stats.mana_p2 = move_toward(stats.mana_p2, stats.max_mana_p2, 
+			MANA_REGENERATION_SPEED * delta))
+		else:
+			stats.mana_p2 = stats.max_mana_p2
 		
 func create_mana_attack():
 	set_projectile_summoner_position()
-	stats.mana -= 2
+	if player_id == 0:
+		stats.mana -= 2
+	else:
+		stats.mana_p2 -= 2
 	
 	var magic_projectile = Utils.instance_scene_on_main(MAGIC_PROJECTILE, 
 	projectileSummoner.global_position)
@@ -358,10 +375,7 @@ func wall_slide_check():
 		double_jump = true
 	else:
 		double_jump = true
-		
-# Get_wall_axis will return -1 if there's a wall to the left, 
-# 1 if there's a wall to the right, 
-# and 0 if there's no wall.
+
 func get_wall_axis():
 	var is_wall_right = test_move(transform, Vector2.RIGHT)
 	var is_wall_left = test_move(transform, Vector2.LEFT)
@@ -400,10 +414,13 @@ func wall_detach_check(wall_axis, delta):
 func _on_AttackTimer_timeout():
 	attack_hitbox_collision.disabled = true
 
-func _on_Stats_no_health():
+func _on_stats_no_health():
 	remove_from_group("Players")
 	queue_free()
 
 func _on_Hurtbox_area_entered(area):
-	stats.health -= area.damage
+	if player_id == 0:
+		stats.health -= area.damage
+	else:
+		stats.health_p2 -= area.damage
 	hurtbox.start_invincability(1)

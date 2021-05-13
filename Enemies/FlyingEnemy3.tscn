@@ -12,7 +12,7 @@ radius = 9.15557
 [sub_resource type="CircleShape2D" id=2]
 radius = 8.0
 
-[sub_resource type="CircleShape2D" id=4]
+[sub_resource type="CircleShape2D" id=3]
 radius = 96.0
 
 [node name="FlyingEnemy" instance=ExtResource( 1 )]
@@ -21,14 +21,14 @@ script = ExtResource( 2 )
 [node name="CollisionShape2D" parent="." index="0"]
 shape = SubResource( 1 )
 
-[node name="Stats" parent="." index="2"]
-maxHealth = 5
-
 [node name="CollisionShape2D" parent="Hurtbox" index="0"]
 shape = SubResource( 1 )
 
 [node name="CollisionShape2D" parent="Hitbox" index="0"]
 shape = SubResource( 2 )
+
+[node name="EnemyStats" parent="." index="4"]
+max_health = 5
 
 [node name="PursuitTimer" type="Timer" parent="." index="5"]
 wait_time = 3.0
@@ -37,7 +37,7 @@ one_shot = true
 [node name="PlayerDetection" parent="." index="6" instance=ExtResource( 3 )]
 
 [node name="CollisionShape2D" parent="PlayerDetection" index="0"]
-shape = SubResource( 4 )
+shape = SubResource( 3 )
 
 [node name="WanderController" parent="." index="7" instance=ExtResource( 5 )]
 

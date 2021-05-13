@@ -1,8 +1,7 @@
 [gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://Graphics/Items/LManaPotion.png" type="Texture" id=1]
-[ext_resource path="res://Items/ManaPotion.gd" type="Script" id=2]
-
+[ext_resource path="res://Items/Potion.gd" type="Script" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 7, 10 )
@@ -11,6 +10,7 @@ extents = Vector2( 7, 10 )
 collision_layer = 0
 collision_mask = 2
 script = ExtResource( 2 )
+TYPE = 2
 STRENGTH = 16
 
 [node name="Sprite" type="Sprite" parent="."]
@@ -21,4 +21,3 @@ offset = Vector2( 0, -2 )
 visible = false
 position = Vector2( 0, -2 )
 shape = SubResource( 1 )
-[connection signal="body_entered" from="." to="." method="_on_LargeManaPotion_body_entered"]

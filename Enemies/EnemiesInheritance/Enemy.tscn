@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://ReusableNodes/Stats.tscn" type="PackedScene" id=2]
+[ext_resource path="res://ReusableNodes/EnemyStats.tscn" type="PackedScene" id=1]
 [ext_resource path="res://ReusableNodes/Hurtbox.tscn" type="PackedScene" id=3]
 [ext_resource path="res://ReusableNodes/Hitbox.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Enemies/EnemiesInheritance/Enemy.gd" type="Script" id=7]
@@ -13,16 +13,16 @@ script = ExtResource( 7 )
 
 [node name="Sprite" type="Sprite" parent="."]
 
-[node name="Stats" parent="." instance=ExtResource( 2 )]
-
 [node name="Hurtbox" parent="." instance=ExtResource( 3 )]
 
 [node name="Hitbox" parent="." instance=ExtResource( 4 )]
 collision_layer = 8
 collision_mask = 64
 
-[connection signal="no_health" from="Stats" to="." method="_on_Stats_no_health"]
+[node name="EnemyStats" parent="." instance=ExtResource( 1 )]
+
 [connection signal="area_entered" from="Hurtbox" to="." method="_on_Hurtbox_area_entered"]
+[connection signal="no_health" from="EnemyStats" to="." method="_on_EnemyStats_no_health"]
 
 [editable path="Hurtbox"]
 [editable path="Hitbox"]

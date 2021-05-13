@@ -6,6 +6,8 @@ export var P1_MAGIC_POSITION_Y = 24
 export var P2_MAGIC_POSITION_X = 8
 export var P2_MAGIC_POSITION_Y = 56
 
+var PlayerStats = ResourceLoader.PlayerStats
+
 var mp = 1 setget set_mp
 var red_mp = 1 setget set_red_mp
 var start = true
@@ -16,7 +18,7 @@ var red_size = 64
 var players = 1
 
 func _ready():
-	if player2 != null:
+	if PlayerStats.p2_exists:
 		players = 2
 	set_stats(players)
 	connect_signals(players)
@@ -29,26 +31,23 @@ func get_percent(a: float, b: float) -> float:
 	percent = a/b
 	return percent
 
-onready var player = get_tree().get_root().find_node("Player1", true, false)
-onready var player2 = get_tree().get_root().find_node("Player2", true, false)
 onready var magicUIFull = $MagicUIEmpty/MagicUIFull
 onready var magicUIEmpty = $MagicUIEmpty
 onready var magicUIFullRed = $MagicUIEmptyRed/MagicUIFullRed
 onready var magicUIEmptyRed = $MagicUIEmptyRed
 
 func set_mp(value):
-	if player == null: return
-	mp = clamp(value, 0, player.stats.maxMana)
-	if magicUIFull != null and start == false and player.stats.mana >= 0:
-		size = 64 * get_percent(player.stats.mana, player.stats.maxMana)
+	mp = clamp(value, 0, PlayerStats.max_mana)
+	if magicUIFull != null and start == false and PlayerStats.mana >= 0:
+		size = 64 * get_percent(PlayerStats.mana, PlayerStats.max_mana)
 	start = false
 		
 func set_red_mp(value):
-	if not players == 2 or player2 == null: return
-	red_mp = clamp(value, 0, player2.stats.maxMana)
-	if magicUIFullRed != null and red_start == false and player2.stats.mana >= 0:
-		red_size = 64 * get_percent(player2.stats.mana, player2.stats.maxMana)
-	if player2.stats.health == 0:
+	if not players == 2: return
+	red_mp = clamp(value, 0, PlayerStats.max_mana_p2)
+	if magicUIFullRed != null and red_start == false and PlayerStats.mana_p2 >= 0:
+		red_size = 64 * get_percent(PlayerStats.mana_p2, PlayerStats.max_mana_p2)
+	if PlayerStats.health_p2 == 0:
 		red_size = 0
 		magicUIFullRed.rect_size.x = 0
 	red_start = false
@@ -56,18 +55,18 @@ func set_red_mp(value):
 # warning-ignore-all:shadowed_variable
 func set_stats(players):
 	if players == 1:
-		self.mp = player.stats.mana
+		self.mp = PlayerStats.mana
 	else:
-		self.mp = player2.stats.mana
-		self.red_mp = player.stats.mana
+		self.mp = PlayerStats.mana_p2
+		self.red_mp = PlayerStats.mana_p2
 		
 func connect_signals(players):
 	if players == 1:
-		player.stats.connect("mana_changed", self, "set_mp")
+		PlayerStats.connect("mana_changed", self, "set_mp")
 	else:
-		player2.stats.connect("mana_changed", self, "set_mp")
-		player.stats.connect("mana_changed", self, "set_red_mp")
-	
+		PlayerStats.connect("mana_changed", self, "set_red_mp")
+		PlayerStats.connect("mana_changed_p2", self, "set_mp")
+
 func set_texture_positions(players):
 	P1_MAGIC_POSITION_X = magicUIEmpty.rect_position.x
 	P1_MAGIC_POSITION_Y = magicUIEmpty.rect_position.y
@@ -90,10 +89,10 @@ func animate(delta):
 		(magicUIFullRed.rect_size.x = move_toward(magicUIFullRed.rect_size.x, 
 		red_size, ANIMATION_SPEED * delta))
 		
-	if player != null and player.stats.health == 0:
+	if PlayerStats.health == 0:
 		size = 0
 		magicUIFull.rect_size.x = 0
 		
-	if player2 != null and player2.stats.health == 0:
+	if PlayerStats.health_p2 == 0:
 		red_size = 0
 		magicUIFullRed.rect_size.x = 0

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://Player/PlayerStats.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+max_health = 6
+max_mana = 16
+max_health_p2 = 6
+max_mana_p2 = 16

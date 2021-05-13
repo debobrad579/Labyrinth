@@ -1,8 +1,7 @@
 [gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://Graphics/Items/SHealthPotion.png" type="Texture" id=1]
-[ext_resource path="res://Items/HealthPotion.gd" type="Script" id=2]
-
+[ext_resource path="res://Items/Potion.gd" type="Script" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 5, 6 )
@@ -20,4 +19,3 @@ texture = ExtResource( 1 )
 visible = false
 position = Vector2( 0, 2 )
 shape = SubResource( 1 )
-[connection signal="body_entered" from="." to="." method="_on_SmallHealthPotion_body_entered"]

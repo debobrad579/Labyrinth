@@ -5,21 +5,21 @@ export var P1_HEART_POSITION_Y = 8
 export var P2_HEART_POSITION_X = 8
 export var P2_HEART_POSITION_Y = 40
 
+var PlayerStats = ResourceLoader.PlayerStats
+
 var hearts = 1 setget set_hearts
 var max_hearts = 1 setget set_max_hearts
 var blue_hearts = 1 setget set_blue_hearts
 var max_blue_hearts = 1 setget set_max_blue_hearts
 var players = 1
 
-onready var player = get_tree().get_root().find_node("Player1", true, false)
-onready var player2 = get_tree().get_root().find_node("Player2", true, false)
 onready var heartUIFull = $HeartUIEmpty/HeartUIFull
 onready var heartUIEmpty = $HeartUIEmpty
 onready var heartUIFullBlue = $HeartUIEmptyBlue/HeartUIFullBlue
 onready var heartUIEmptyBlue = $HeartUIEmptyBlue
 
 func _ready():
-	if player2 != null:
+	if PlayerStats.p2_exists:
 		players = 2
 	set_stats(players)
 	connect_signals(players)
@@ -47,27 +47,26 @@ func set_max_blue_hearts(value):
 	if heartUIEmptyBlue != null:
 		heartUIEmptyBlue.rect_size.x = max_blue_hearts * 8
 
-
 # warning-ignore-all:shadowed_variable
 func set_stats(players):
 	if players == 1:
-		self.max_hearts = player.stats.maxHealth
-		self.hearts = player.stats.health
+		self.max_hearts = PlayerStats.max_health
+		self.hearts = PlayerStats.health
 	else:
-		self.max_blue_hearts = player.stats.maxHealth
-		self.blue_hearts = player.stats.health
-		self.max_hearts = player2.stats.maxHealth
-		self.hearts = player2.stats.health
+		self.max_blue_hearts = PlayerStats.max_health
+		self.blue_hearts = PlayerStats.health
+		self.max_hearts = PlayerStats.max_health_p2
+		self.hearts = PlayerStats.health_p2
 		
 func connect_signals(players):
 	if players == 1:
-		player.stats.connect("health_changed", self, "set_hearts")
-		player.stats.connect("max_health_changed", self, "set_max_hearts")
+		PlayerStats.connect("health_changed", self, "set_hearts")
+		PlayerStats.connect("max_health_changed", self, "set_max_hearts")
 	else:
-		player.stats.connect("health_changed", self, "set_blue_hearts")
-		player.stats.connect("max_health_changed", self, "set_max_blue_hearts")
-		player2.stats.connect("health_changed", self, "set_hearts")
-		player2.stats.connect("max_health_changed", self, "set_max_hearts")
+		PlayerStats.connect("health_changed", self, "set_blue_hearts")
+		PlayerStats.connect("max_health_changed", self, "set_max_blue_hearts")
+		PlayerStats.connect("health_changed_p2", self, "set_hearts")
+		PlayerStats.connect("max_health_changed_p2", self, "set_max_hearts")
 		
 func set_texture_positions(players):
 	P1_HEART_POSITION_X = heartUIEmptyBlue.rect_position.x

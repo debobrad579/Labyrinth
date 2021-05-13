@@ -9,13 +9,13 @@
 config_version=4
 
 _global_script_classes=[ {
-"base": "Node",
-"class": "EntityStats",
+"base": "Resource",
+"class": "PlayerStats",
 "language": "GDScript",
-"path": "res://ReusableNodes/Stats.gd"
+"path": "res://Player/PlayerStats.gd"
 } ]
 _global_script_class_icons={
-"EntityStats": ""
+"PlayerStats": ""
 }
 
 [application]
@@ -27,6 +27,7 @@ config/icon="res://Graphics/UI/LabyrinthBetaLogoVer2.png"
 [autoload]
 
 Utils="*res://Singletons/Utils.gd"
+ResourceLoader="*res://Singletons/ResourceLoader.gd"
 
 [display]
 

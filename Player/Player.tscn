@@ -87,8 +87,6 @@ shape = SubResource( 2 )
 disabled = true
 
 [node name="Stats" parent="." instance=ExtResource( 3 )]
-maxHealth = 6
-maxMana = 16
 
 [node name="Hurtbox" parent="." instance=ExtResource( 4 )]
 collision_layer = 64
@@ -118,7 +116,6 @@ shape = SubResource( 5 )
 position = Vector2( 8, 0 )
 
 [connection signal="timeout" from="AttackTimer" to="." method="_on_AttackTimer_timeout"]
-[connection signal="no_health" from="Stats" to="." method="_on_Stats_no_health"]
 [connection signal="area_entered" from="Hurtbox" to="." method="_on_Hurtbox_area_entered"]
 
 [editable path="BasicAttackPivot/Hitbox"]
