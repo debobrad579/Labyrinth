@@ -12,7 +12,6 @@ export var KNOCKBACK_AMOUNT_Y = 1
 var state
 var state_was
 var snap_vector = Vector2.ZERO
-var knockback_vector = Vector2.ZERO
 var knockback_stop_vector = Vector2.ZERO
 
 onready var floorDetectorLeft = $FloorDetectorLeft
@@ -23,10 +22,8 @@ onready var wallDetectorLeft = $WallDetectorLeft
 onready var wallDetectorRight = $WallDetectorRight
 
 func slope_detected():
-	if ((slopeDetectorLeft.is_colliding() or slopeDetectorRight.is_colliding())
-	and not (wallDetectorRight.is_colliding() or wallDetectorLeft.is_colliding())):
-		return true
-	else: return false
+	return ((slopeDetectorLeft.is_colliding() or slopeDetectorRight.is_colliding())
+	and not (wallDetectorRight.is_colliding() or wallDetectorLeft.is_colliding()))
 
 func _ready():
 	motion.y = 8
@@ -34,23 +31,13 @@ func _ready():
 	state_was = ENEMY_MOVEMENT
 
 func _physics_process(delta):
-	change_motion_values(delta)
-	if not slope_detected():
-		apply_gravity(delta)
-	move()
-		
-func change_motion_values(delta):
 	match state:
 		MOVEMENT.RIGHT:
-			snap_vector = Vector2.DOWN
-			motion.x += ACCELERATION * delta
-			motion.x = min(motion.x, MAX_SPEED)
+			apply_horizontal_force(delta)
 			if not floorDetectorRight.is_colliding() or wallDetectorRight.is_colliding(): 
 				state = MOVEMENT.LEFT
 		MOVEMENT.LEFT:
-			snap_vector = Vector2.DOWN
-			motion.x -= ACCELERATION * delta
-			motion.x = max(motion.x, -MAX_SPEED)
+			apply_horizontal_force(delta)
 			if not floorDetectorLeft.is_colliding() or wallDetectorLeft.is_colliding(): 
 				state = MOVEMENT.RIGHT
 		MOVEMENT.KNOCKBACK:
@@ -59,11 +46,20 @@ func change_motion_values(delta):
 			KNOCKBACK_FRICTION * delta))
 			if motion.y == 0 or slope_detected():
 				state = state_was
+	if not slope_detected():
+		apply_gravity(delta)
+	move()
 
 func move():
 	(motion = move_and_slide_with_snap(motion, snap_vector * 4, 
 	Vector2.UP, true, 4, deg2rad(46)))
-		
+
+func apply_horizontal_force(delta):
+	if not (state == MOVEMENT.LEFT or state == MOVEMENT.RIGHT): return
+	snap_vector = Vector2.DOWN
+	motion.x += ACCELERATION * delta * state
+	motion.x = clamp(motion.x, -MAX_SPEED, MAX_SPEED)
+
 func apply_gravity(delta):
 		motion.y += GRAVITY * delta
 
@@ -80,4 +76,5 @@ func apply_knockback(area):
 		knockback_stop_vector = Vector2.ZERO
 	state = MOVEMENT.KNOCKBACK
 	snap_vector = Vector2.ZERO
-	motion = Vector2(area.knockback_x * KNOCKBACK_AMOUNT_X, -area.knockback_y * KNOCKBACK_AMOUNT_Y)
+	motion = Vector2(area.knockback_x * KNOCKBACK_AMOUNT_X, -area.knockback_y 
+	* KNOCKBACK_AMOUNT_Y)

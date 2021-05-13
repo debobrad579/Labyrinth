@@ -25,7 +25,7 @@ var target_player = null
 # Aim is different. This will hold the relative difference between
 # The monsters location and the players. For example, if the player 
 # is 50px to the right and 10px down (FROM THE MONSTER), then the aim would be
-# that... not the players global poisiton, which could be anything.
+# that... not the players global positon, which could be anything.
 var aim = Vector2.ZERO
 
 onready var stats = $Stats
