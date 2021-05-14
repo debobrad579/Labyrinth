@@ -1,0 +1,50 @@
+[gd_scene load_steps=4 format=2]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 11.1593, 2.84673 )
+
+[sub_resource type="Curve2D" id=2]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 0, -32, 0, 0, 0, 0, 0, 24 )
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "Move"
+length = 4.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Path2D/PathFollow2D:unit_offset")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, 1.0 ]
+}
+
+[node name="MovingPlatform" type="Node2D"]
+
+[node name="Platform" type="KinematicBody2D" parent="."]
+position = Vector2( 0, -32 )
+motion/sync_to_physics = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform"]
+shape = SubResource( 1 )
+one_way_collision = true
+
+[node name="Path2D" type="Path2D" parent="."]
+curve = SubResource( 2 )
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Path2D"]
+position = Vector2( 0, -32 )
+rotate = false
+
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="Path2D/PathFollow2D"]
+remote_path = NodePath("../../../Platform")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "Move"
+anims/Move = SubResource( 3 )

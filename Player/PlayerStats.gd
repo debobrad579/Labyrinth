@@ -17,7 +17,7 @@ signal health_changed
 signal max_health_changed(value)
 signal no_health_p2
 signal health_changed_p2
-signal max_health_changed_P2(value)
+signal max_health_changed_p2(value)
 signal mana_changed
 signal max_mana_changed(value)
 signal mana_changed_p2
@@ -35,6 +35,8 @@ func set_max_health(value):
 	emit_signal("max_health_changed", max_health)
 
 func set_health(value):
+	if value < health:
+		Events.emit_signal("add_screenshake", 0.25, 0.4)
 	health = value
 	emit_signal("health_changed", health)
 	health = clamp(health, 0, max_health)
@@ -58,6 +60,8 @@ func set_max_health_p2(value):
 	emit_signal("max_health_changed_p2", max_health_p2)
 
 func set_health_p2(value):
+	if value < health_p2:
+		Events.emit_signal("add_screenshake", 0.25, 0.4)
 	health_p2 = value
 	emit_signal("health_changed_p2", health_p2)
 	health_p2 = clamp(health_p2, 0, max_health_p2)

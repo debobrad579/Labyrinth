@@ -9,15 +9,19 @@ var PlayerStats = ResourceLoader.PlayerStats
 
 onready var topLeft = $Limits/TopLeft
 onready var bottomRight = $Limits/BottomRight
+onready var shakeTimer = $ShakeTimer
 onready var players = get_tree().get_nodes_in_group("Players")
 
 var scaler = 1
-var all_players_dead = false
+var shake = 0
 
 func _ready():
+	Events.connect("add_screenshake", self, "_on_Events_add_screenshake")
 	set_limits()
 
-func _physics_process(delta):
+func _physics_process(_delta):
+	offset_h = rand_range(-shake, shake)
+	offset_v = rand_range(-shake, shake)
 	players = get_tree().get_nodes_in_group("Players")
 	set_player_boundaries()
 	set_camera_scaling_and_positioning()
@@ -62,3 +66,14 @@ func set_limits():
 	limit_left = topLeft.position.x
 	limit_bottom = bottomRight.position.y
 	limit_right = bottomRight.position.x
+
+func set_screenshake(amount, duration):
+	shake = amount
+	shakeTimer.wait_time = duration
+	shakeTimer.start()
+
+func _on_Events_add_screenshake(amount, duration):
+	set_screenshake(amount, duration)
+
+func _on_ShakeTimer_timeout():
+	shake = 0

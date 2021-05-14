@@ -10,8 +10,8 @@ func _physics_process(delta):
 func _on_VisibilityNotifier2D_screen_exited():
 	queue_free()
 
-func _on_Hitbox_area_entered(area):
+func _on_Hitbox_area_entered(_area):
 	queue_free()
 
-func _on_Projectile_body_entered(body):
+func _on_Projectile_body_entered(_body):
 	queue_free()

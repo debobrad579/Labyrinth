@@ -28,6 +28,11 @@ config/icon="res://Graphics/UI/LabyrinthBetaLogoVer2.png"
 
 Utils="*res://Singletons/Utils.gd"
 ResourceLoader="*res://Singletons/ResourceLoader.gd"
+Events="*res://Singletons/Events.gd"
+
+[debug]
+
+gdscript/warnings/return_value_discarded=false
 
 [display]
 

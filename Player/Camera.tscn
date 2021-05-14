@@ -15,3 +15,9 @@ position = Vector2( -686.225, -292.17 )
 
 [node name="BottomRight" type="Position2D" parent="Limits"]
 position = Vector2( 989.743, 180 )
+
+[node name="ShakeTimer" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
+
+[connection signal="timeout" from="ShakeTimer" to="." method="_on_ShakeTimer_timeout"]
