@@ -12,10 +12,11 @@ var mp = 1 setget set_mp
 var red_mp = 1 setget set_red_mp
 var start = true
 var red_start = true
-var percent = 0
 var size = 64
 var red_size = 64
 var players = 1
+
+# warning-ignore-all:shadowed_variable
 
 func _ready():
 	if PlayerStats.p2_exists:
@@ -28,8 +29,7 @@ func _physics_process(delta):
 	animate(delta)
 
 func get_percent(a: float, b: float) -> float:
-	percent = a/b
-	return percent
+	return a/b
 
 onready var magicUIFull = $MagicUIEmpty/MagicUIFull
 onready var magicUIEmpty = $MagicUIEmpty
@@ -52,7 +52,6 @@ func set_red_mp(value):
 		magicUIFullRed.rect_size.x = 0
 	red_start = false
 
-# warning-ignore-all:shadowed_variable
 func set_stats(players):
 	if players == 1:
 		self.mp = PlayerStats.mana
@@ -64,8 +63,8 @@ func connect_signals(players):
 	if players == 1:
 		PlayerStats.connect("mana_changed", self, "set_mp")
 	else:
-		PlayerStats.connect("mana_changed", self, "set_red_mp")
-		PlayerStats.connect("mana_changed_p2", self, "set_mp")
+		PlayerStats.connect("mana_changed", self, "set_mp")
+		PlayerStats.connect("mana_changed_p2", self, "set_red_mp")
 
 func set_texture_positions(players):
 	P1_MAGIC_POSITION_X = magicUIEmpty.rect_position.x

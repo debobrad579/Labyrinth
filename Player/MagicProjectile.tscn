@@ -7,13 +7,25 @@
 [ext_resource path="res://Graphics/PlayerAssets/MagicProjectileP2.png" type="Texture" id=5]
 [ext_resource path="res://Graphics/PlayerAssets/MagicGradiantP2.tres" type="Gradient" id=6]
 
-[sub_resource type="RectangleShape2D" id=3]
+[sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 6, 3 )
 
-[sub_resource type="GradientTexture" id=4]
+[sub_resource type="GradientTexture" id=2]
 gradient = ExtResource( 3 )
 
-[sub_resource type="ParticlesMaterial" id=2]
+[sub_resource type="ParticlesMaterial" id=3]
+emission_shape = 1
+emission_sphere_radius = 5.0
+flag_disable_z = true
+gravity = Vector3( 0, 0, 0 )
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+color_ramp = SubResource( 2 )
+
+[sub_resource type="GradientTexture" id=4]
+gradient = ExtResource( 6 )
+
+[sub_resource type="ParticlesMaterial" id=5]
 emission_shape = 1
 emission_sphere_radius = 5.0
 flag_disable_z = true
@@ -22,19 +34,7 @@ orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 color_ramp = SubResource( 4 )
 
-[sub_resource type="GradientTexture" id=5]
-gradient = ExtResource( 6 )
-
-[sub_resource type="ParticlesMaterial" id=6]
-emission_shape = 1
-emission_sphere_radius = 5.0
-flag_disable_z = true
-gravity = Vector3( 0, 0, 0 )
-orbit_velocity = 0.0
-orbit_velocity_random = 0.0
-color_ramp = SubResource( 5 )
-
-[sub_resource type="CapsuleShape2D" id=7]
+[sub_resource type="CapsuleShape2D" id=6]
 radius = 4.0
 height = 10.0
 
@@ -42,7 +42,7 @@ height = 10.0
 script = ExtResource( 4 )
 
 [node name="CollisionShape2D" parent="." index="0"]
-shape = SubResource( 3 )
+shape = SubResource( 1 )
 
 [node name="Sprite" parent="." index="1"]
 texture = ExtResource( 1 )
@@ -61,7 +61,7 @@ position = Vector2( 3, 0 )
 amount = 30
 lifetime = 0.8
 local_coords = false
-process_material = SubResource( 2 )
+process_material = SubResource( 3 )
 
 [node name="Particles2DP2" type="Particles2D" parent="." index="5"]
 visible = false
@@ -69,7 +69,7 @@ position = Vector2( 3, 0 )
 amount = 30
 lifetime = 0.8
 local_coords = false
-process_material = SubResource( 6 )
+process_material = SubResource( 5 )
 
 [node name="Hitbox" parent="." index="6"]
 collision_layer = 32
@@ -77,6 +77,6 @@ collision_mask = 4
 
 [node name="CollisionShape2D" parent="Hitbox" index="0"]
 rotation = 1.5708
-shape = SubResource( 7 )
+shape = SubResource( 6 )
 
 [editable path="Hitbox"]

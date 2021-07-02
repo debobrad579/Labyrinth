@@ -146,8 +146,12 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed(ATTACK):
 		create_regular_attack()
 		
-	if Input.is_action_just_pressed(SECONDARY_ATTACK) and stats.mana >= 2:
-		create_mana_attack()
+	if player_id == 0:
+		if Input.is_action_just_pressed(SECONDARY_ATTACK) and stats.mana >= 2:
+			create_mana_attack()
+	else:
+		if Input.is_action_just_pressed(SECONDARY_ATTACK) and stats.mana_p2 >= 2:
+			create_mana_attack()
 		
 func create_regular_attack():
 	set_attack_pivot_rotation()
@@ -165,14 +169,10 @@ func set_mana_regeneration(delta):
 		if stats.mana < stats.max_mana:
 			(stats.mana = move_toward(stats.mana, stats.max_mana, 
 			MANA_REGENERATION_SPEED * delta))
-		else:
-			stats.mana = stats.max_mana
 	else:
 		if stats.mana_p2 < stats.max_mana_p2:
 			(stats.mana_p2 = move_toward(stats.mana_p2, stats.max_mana_p2, 
 			MANA_REGENERATION_SPEED * delta))
-		else:
-			stats.mana_p2 = stats.max_mana_p2
 		
 func create_mana_attack():
 	set_projectile_summoner_position()
@@ -368,7 +368,6 @@ func move():
 func wall_slide_check():
 	if is_on_floor() or not is_on_wall(): return
 	state = WALL_SLIDE
-	just_wall_jumped = false
 	if wall_double_jump == false: return
 	if double_jump == false:
 		wall_double_jump = false
